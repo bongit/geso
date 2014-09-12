@@ -8,6 +8,12 @@
   <dd><%= @user.name %></dd>
 </dl>
 
+<section>
+  <%= render 'shared/stats' %>
+</section>
+<%= render 'follow_form' if signed_in? %>
+
+
   <div class="span6">
     <% if @user.game_assets.any? %>
       <h3>素材 (<%= @user.game_assets.count %>)</h3>
