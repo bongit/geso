@@ -8,6 +8,17 @@
   <dd><%= @user.name %></dd>
 </dl>
 
+  <div class="span6">
+    <% if @user.game_assets.any? %>
+      <h3>素材 (<%= @user.game_assets.count %>)</h3>
+      <ol class="game_assets">
+        <%= render @game_assets %>
+      </ol>
+      <%= will_paginate @game_assets %>
+    <% end %>
+  </div>
+
+
 <%= link_to t('.back', :default => t("helpers.links.back")),
               users_path, :class => 'btn btn-default'  %>
 

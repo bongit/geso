@@ -28,7 +28,7 @@ class GameAssetsController < ApplicationController
   def create
     @game_asset = GameAsset.new(game_asset_params)
     s3 = AWS::S3.new
-    bucket = s3.buckets['geso2']
+    bucket = s3.buckets[Rails.application.secrets.bucket_name]
      
     file = game_asset_params[:file]
     file_name = file.original_filename
@@ -36,8 +36,8 @@ class GameAssetsController < ApplicationController
 
     object = bucket.objects[file_full_path]
     object.write(file ,:acl => :public_read)
-    @game_asset.name="http://s3-us-west-2.amazonaws.com/geso2/assets/#{file_name}"
-    @game_asset.user_id = '1'
+    @game_asset.name= Rails.application.secrets.aws_s3_path + "#{file_name}"
+    @game_asset.user_id = current_user.id
 
     respond_to do |format|
       if @game_asset.save
@@ -76,7 +76,7 @@ class GameAssetsController < ApplicationController
 
   def download
     obj_url = @game_asset.name.slice(40..-1)
-    send_data(AWS::S3.new.buckets['geso2'].objects[obj_url].read, {
+    send_data(AWS::S3.new.buckets[Rails.application.secrets.bucket_name].objects[obj_url].read, {
       filename: obj_url.slice(7..-1),
       content_disposition: 'attachement'
       })
@@ -98,8 +98,8 @@ class GameAssetsController < ApplicationController
       redirect_to signin_url, notice: "ログインして下さい。" unless signed_in?
     end
       AWS.config(
-    access_key_id:      'AKIAIYPVB2KTRWGYP33A', 
-    secret_access_key:  '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', 
+    access_key_id:      Rails.application.secrets.aws_s3_access_key, 
+    secret_access_key:  Rails.application.secrets.aws_s3_secret_key, 
     region:             'us-west-2',
     :s3_server_side_encryption => :aes256
     )
