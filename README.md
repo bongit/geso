@@ -1,4 +1,4 @@
 GESO TEST
 
 - without secrets.yml
-- database.yml
+- without database.yml
