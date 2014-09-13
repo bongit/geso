@@ -27,17 +27,15 @@ class GameAssetsController < ApplicationController
   # POST /game_assets.json
   def create
     @game_asset = GameAsset.new(game_asset_params)
-    s3 = AWS::S3.new
-    bucket = s3.buckets[Rails.application.secrets.bucket_name]
-     
+    bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
     file = game_asset_params[:file]
-    file_name = file.original_filename
-    file_full_path="assets/"+file_name
 
-    object = bucket.objects[file_full_path]
+    object = bucket.objects[Rails.application.secrets.aws_s3_dir_name + file.original_filename]
     object.write(file ,:acl => :public_read)
-    @game_asset.name= Rails.application.secrets.aws_s3_path + "#{file_name}"
+
     @game_asset.user_id = current_user.id
+    @game_asset.name = game_asset_params[:name]
+    @game_asset.file_name = file.original_filename
 
     respond_to do |format|
       if @game_asset.save
@@ -67,6 +65,11 @@ class GameAssetsController < ApplicationController
   # DELETE /game_assets/1
   # DELETE /game_assets/1.json
   def destroy
+    bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
+    dir_file = Rails.application.secrets.aws_s3_dir_name + @game_asset.file_name
+    obj = bucket.objects[dir_file]
+    obj.delete
+
     @game_asset.destroy
     respond_to do |format|
       format.html { redirect_to game_assets_url, notice: 'Game asset was successfully destroyed.' }
@@ -75,9 +78,11 @@ class GameAssetsController < ApplicationController
   end
 
   def download
-    obj_url = @game_asset.name.slice(40..-1)
-    send_data(AWS::S3.new.buckets[Rails.application.secrets.bucket_name].objects[obj_url].read, {
-      filename: obj_url.slice(7..-1),
+    bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
+    dir_file = Rails.application.secrets.aws_s3_dir_name + @game_asset.file_name
+
+    send_data(bucket.objects[dir_file].read, {
+      filename: @game_asset.file_name,
       content_disposition: 'attachement'
       })
   end
@@ -90,17 +95,19 @@ class GameAssetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def game_asset_params
-      params.require(:game_asset).permit(:file)
+      params.require(:game_asset).permit(:file, :name)
     end
 
     def singed_in_asset
       store_location
       redirect_to signin_url, notice: "ログインして下さい。" unless signed_in?
     end
-      AWS.config(
-    access_key_id:      Rails.application.secrets.aws_s3_access_key, 
-    secret_access_key:  Rails.application.secrets.aws_s3_secret_key, 
-    region:             'us-west-2',
-    :s3_server_side_encryption => :aes256
+
+
+    AWS.config(
+      access_key_id:      Rails.application.secrets.aws_s3_access_key, 
+      secret_access_key:  Rails.application.secrets.aws_s3_secret_key, 
+      region:             'us-west-2',
+      :s3_server_side_encryption => :aes256
     )
 end

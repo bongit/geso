@@ -11,14 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140912084316) do
+ActiveRecord::Schema.define(version: 20140913062537) do
 
   create_table "game_assets", force: true do |t|
     t.string   "name"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "file_name"
+    t.integer  "price",            limit: 3, default: 0, null: false
+    t.string   "sales_copy"
+    t.string   "sales_body"
+    t.string   "sales_closing"
+    t.string   "promo_url"
+    t.integer  "downloaded_times",           default: 0, null: false
+    t.string   "category_1"
+    t.string   "category_2"
+    t.string   "category_3"
+    t.integer  "rating"
   end
+
+  add_index "game_assets", ["name"], name: "index_game_assets_on_name", using: :btree
 
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"

@@ -1,21 +1,25 @@
 <%= form_for(@game_asset) do |f| %>
-  <% if @game_asset.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@game_asset.errors.count, "error") %> prohibited this game_asset from being saved:</h2>
+<% if @game_asset.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@game_asset.errors.count, "error") %> prohibited this game_asset from being saved:</h2>
 
-      <ul>
-      <% @game_asset.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <ul>
+    <% @game_asset.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
 
-  <div class="field">
-    <%= f.label :file %><br>
-    <%= f.file_field :file %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+<div class="field">
+  <%= f.label "商品名" %><br>
+  <%= f.text_field :name %>
+</div>
+<div class="field">
+  <%= f.label "アップロード" %><br>
+  <%= f.file_field :file %>
+</div>
+<div class="actions">
+  <%= f.submit %>
+</div>
 <% end %>
