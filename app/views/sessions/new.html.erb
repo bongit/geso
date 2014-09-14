@@ -1,23 +1,18 @@
 <%= form_for(:session, url: sessions_path, :html => { :class => "form-horizontal user" }) do |f| %>
 <div class="panel-heading">
-	<h3 class="panel-title"></h3>
+	<h1>ログイン</h1>
 </div>
 <div class="panel-body">
-	<div class="control-group">
-		<%= f.label :email , :class => 'control-label' %>
-		<div class="controls">
-			<%= f.text_field :email, :class => 'form-control' %>
-		</div>
-	</div>
-	<div class="control-group">
-		<%= f.label :password, :class => 'control-label' %>
-		<div class="controls">
-			<%= f.password_field :password, :class => 'form-control' %>
-		</div>
-	</div>
-		<%= f.submit "Sign in", class: "btn btn-large btn-primary" %>
-		<% end %>
-
-		<p>New user? <%= link_to "Sign up now!", signup_path %></p>
+	<div class="col-lg-6">
+		<%= f.label "メールアドレス" , :class => 'control-label' %>
+		<%= f.text_field :email, :class => 'form-control' %>
+		<%= f.label "パスワード", :class => 'control-label' %>
+		<%= f.password_field :password, :class => 'form-control' %>
+		</br>
+		<%= f.submit "ログイン", class: "btn btn-large btn-primary" %>
+	<% end %>
+		</br>
+		<p>ユーザー登録がまだの方➡<%= link_to "新規登録", signup_path %></p> 
+		<p>パスワードをお忘れですか？➡<%= link_to "パスワード再設定", 'users/forgot_password' %></p> 
 	</div>
 </div>

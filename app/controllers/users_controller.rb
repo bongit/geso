@@ -32,8 +32,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'ユーザー登録が完了しました。' }
-        format.json { render :show, status: :created, location: @user }
+        format.html { redirect_to '/signin', notice: 'ユーザー登録が完了しました。' }
+        format.json { render '/signin', status: :created, location: root_path }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -79,6 +79,10 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
 
+  def forgot_password
+    
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -87,7 +91,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :profile_text)
     end
 
     # Before actions

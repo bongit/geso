@@ -12,6 +12,10 @@
       <%= f.text_field :email, :class => 'form-control' %>
       <%= error_span(@user[:email]) %>
 
+      <%= f.label "自己紹介分", :class => 'control-label' %>
+      <%= f.text_area :profile_text, :class => 'form-control' %>
+      <%= error_span(@user[:profile_text]) %>
+
       <%= f.label "パスワード", :class => 'control-label' %>
       <%= f.password_field :password, :class => 'form-control' %>
       <%= error_span(@user[:password]) %>

@@ -8,8 +8,8 @@ class SessionsController < ApplicationController
 			sign_in user
 			redirect_back_or user
 		else
-		flash.now[:error] = 'メールアドレスまたはパスワードが誤っています。'
-		render 'new'
+			flash.now[:error] = 'メールアドレスまたはパスワードが誤っています。'
+			render 'new'
 		end
 	end
 

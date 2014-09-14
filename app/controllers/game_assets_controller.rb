@@ -12,6 +12,8 @@ class GameAssetsController < ApplicationController
   # GET /game_assets/1
   # GET /game_assets/1.json
   def show
+    user=current_user
+    @author=User.find_by(@game_asset.user_id)
   end
 
   # GET /game_assets/new

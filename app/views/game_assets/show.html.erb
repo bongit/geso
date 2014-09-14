@@ -8,9 +8,12 @@
 
 <p>
   <strong>作者:</strong>
-  <%= @game_asset.user_id %>
+  <%= link_to @author.name, user_path(@author) %>
 </p>
 
-<%= link_to 'Edit', edit_game_asset_path(@game_asset) %> |
+<%= link_to 'Edit', edit_game_asset_path(@game_asset) %>
+<%= link_to 'Destroy', @game_asset, method: :delete, data: { confirm: 'Are you sure?' } %>
 <%= link_to 'Back', game_assets_path %>
+
+
 <%= link_to 'Download', :action => 'download' %>
