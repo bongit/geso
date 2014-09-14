@@ -1,3 +1,4 @@
 <% @game_assets.each do |g| %>
 <%= link_to g.name, game_asset_path(g)%>
+ダウンロード：<%= g.downloaded_times %>
 <% end %>
