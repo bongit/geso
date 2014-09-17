@@ -28,26 +28,43 @@ class GameAssetsController < ApplicationController
   # POST /game_assets
   # POST /game_assets.json
   def create
-    @game_asset = GameAsset.new(game_asset_params)
-    bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
     file = game_asset_params[:file]
+    name = file.original_filename
 
-    object = bucket.objects[Rails.application.secrets.aws_s3_dir_name + file.original_filename]
-    object.write(file ,:acl => :public_read)
+    #File -> temp
+    File.open("tmp/check/#{name}", 'wb') { |f|
+      f.write(file.read)
+    }
 
-    @game_asset.user_id = current_user.id
-    @game_asset.name = game_asset_params[:name]
-    @game_asset.file_name = file.original_filename
+    %x(clamscan "tmp/check/#{name}")
+    if $? == 0
+      # File -> Storage
+      @game_asset = GameAsset.new(game_asset_params)
+      bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
+      object = bucket.objects[Rails.application.secrets.aws_s3_dir_name + file.original_filename]
+      object.write(file ,:acl => :public_read)
 
-    respond_to do |format|
-      if @game_asset.save
-        format.html { redirect_to @game_asset, notice: 'Game asset was successfully created.' }
-        format.json { render :show, status: :created, location: @game_asset }
-      else
-        format.html { render :new }
-        format.json { render json: @game_asset.errors, status: :unprocessable_entity }
+      # File Info -> Database
+      @game_asset.user_id = current_user.id
+      @game_asset.name = game_asset_params[:name]
+      @game_asset.file_name = file.original_filename
+      @game_asset.price = game_asset_params[:price]
+
+      respond_to do |format|
+        if @game_asset.save
+          format.html { redirect_to @game_asset, notice: '素材の登録が完了しました。' }
+          format.json { render :show, status: :created, location: @game_asset }
+        else
+          format.html { render :new , notice: '値が正しくありません。'}
+          format.json { render json: @game_asset.errors, status: :unprocessable_entity }
+        end
       end
+
+    else
+      redirect_to new_game_asset_path, alert: 'アップロードに失敗しました。ファイルがウイルスに感染している疑いがあります。' 
     end
+    %x(rm -rf "tmp/check/#{name}")
+
   end
 
   # PATCH/PUT /game_assets/1
@@ -87,6 +104,10 @@ class GameAssetsController < ApplicationController
       filename: @game_asset.file_name,
       content_disposition: 'attachement'
       })
+    dt = @game_asset.downloaded_times + 1
+    if @game_asset.update_attribute(:downloaded_times, dt)
+    else
+    end
   end
 
   private
@@ -97,7 +118,7 @@ class GameAssetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def game_asset_params
-      params.require(:game_asset).permit(:file, :name)
+      params.require(:game_asset).permit(:file, :name, :price, :downloaded_times)
     end
 
     def singed_in_asset

@@ -1,16 +1,15 @@
 # coding: utf-8
 <p id="notice"><%= notice %></p>
 
-<p>
   <strong>名前:</strong>
   <%= @game_asset.name %>
-</p>
-
-<p>
+</br>
   <strong>作者:</strong>
   <%= link_to @author.name, user_path(@author) %>
-</p>
-
+</br>
+  <strong>価格:</strong>
+  <%= @game_asset.price %>
+</br>
 <%= link_to 'Edit', edit_game_asset_path(@game_asset) %>
 <%= link_to 'Destroy', @game_asset, method: :delete, data: { confirm: 'Are you sure?' } %>
 <%= link_to 'Back', game_assets_path %>

@@ -1,16 +1,16 @@
 <%= form_for(@game_asset) do |f| %>
 <% if @game_asset.errors.any? %>
-<div id="error_explanation">
-  <h2><%= pluralize(@game_asset.errors.count, "error") %> prohibited this game_asset from being saved:</h2>
-
-  <ul>
-    <% @game_asset.errors.full_messages.each do |message| %>
-    <li><%= message %></li>
+  <div id="error_explanation">
+    <div class="alert alert-error">
+      入力内容に <%= pluralize(@game_asset.errors.count,"") %>つの誤りがあります。
+    </div>
+    <ul>
+    <% @game_asset.errors.full_messages.each do |msg| %>
+      <li>* <%= msg %></li>
     <% end %>
-  </ul>
-</div>
+    </ul>
+  </div>
 <% end %>
-
 <div class="field">
   <%= f.label "商品名" %><br>
   <%= f.text_field :name %>
@@ -19,7 +19,11 @@
   <%= f.label "アップロード" %><br>
   <%= f.file_field :file %>
 </div>
+<div class="field">
+  <%= f.label "価格" %><br>
+  <%= f.number_field :price %>
+</div>
 <div class="actions">
-  <%= f.submit %>
+  <%= f.submit "登録" %>
 </div>
 <% end %>

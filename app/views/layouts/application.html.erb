@@ -22,11 +22,14 @@
             <li><%= link_to "新規登録", signup_path %></li>
             <% else %>
             <% if signed_in? %>
-                          <li id="fat-menu" class="dropdown">
+              <li><%= link_to "素材一覧", game_assets_path %></li>
+              <li><%= link_to "ユーザ一覧", users_path %></li>
+                <li id="fat-menu" class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                   マイアカウント<b class="caret"></b>
+                マイアカウント<b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
+                  <li><%= link_to "素材登録", new_game_asset_path %></li>
                   <li><%= link_to "プロフィール", current_user %></li>
                   <li><%= link_to "編集", edit_user_path(current_user)  %></li>
                   <li class="divider"></li>
@@ -64,6 +67,7 @@
                    マイアカウント<b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
+                  <li><%= link_to "素材登録", new_game_asset_path %></li>
                   <li><%= link_to "プロフィール", current_user %></li>
                   <li><%= link_to "編集", edit_user_path(current_user)  %></li>
                   <li class="divider"></li>

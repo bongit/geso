@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'rack-secure-upload'
 gem 'aws-sdk'
 gem 'faker'
 gem 'will_paginate'

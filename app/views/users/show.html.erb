@@ -11,9 +11,11 @@
 <%= render 'shared/stats' %>
 <%= render 'follow_form' if signed_in? %>
 
-</hr>
+<!-- 素材 -->
+<div class="page-header">
   <% if @user.game_assets.any? %>
     <h3>素材<%= @user.game_assets.count%>個</h3>
+</div>
     <ol class="game_assets">
     <%= render 'game_assets' %>
     </ol>
