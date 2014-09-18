@@ -16,6 +16,10 @@
       <%= f.text_area :profile_text, :class => 'form-control' %>
       <%= error_span(@user[:profile_text]) %>
 
+      <%= f.label "参考URL", :class => 'control-label' %>
+      <%= f.text_field :url, :class => 'form-control' %>
+      <%= error_span(@user[:url]) %>
+
       <%= f.label "パスワード", :class => 'control-label' %>
       <%= f.password_field :password, :class => 'form-control' %>
       <%= error_span(@user[:password]) %>
