@@ -4,24 +4,23 @@
   </div>
   <div class="container">
     <div class="col-lg-6">
-      <%= f.label "名前（ニックネーム可）", :class => 'control-label' %>
+      <%= f.label t('.name'), :class => 'control-label' %>
       <%= f.text_field :name, :class => 'form-control' %>
       <%= error_span(@user[:name]) %>
 
-      <%= f.label "メールアドレス", :class => 'control-label' %>
+      <%= f.label t('.email'), :class => 'control-label' %>
       <%= f.text_field :email, :class => 'form-control' %>
       <%= error_span(@user[:email]) %>
 
-      <%= f.label "パスワード", :class => 'control-label' %>
+      <%= f.label t('.password'), :class => 'control-label' %>
       <%= f.password_field :password, :class => 'form-control' %>
       <%= error_span(@user[:password]) %>
 
-      <%= f.label "パスワード確認", :class => 'control-label' %>
+      <%= f.label t('.password_confirmation'), :class => 'control-label' %>
       <%= f.password_field :password_confirmation, :class => 'form-control' %>
-      <%= error_span(@user[:password_confirmation]) %>
+      <%= error_span(@user[:password_confirmation]) %></br>
       
-      <%= f.submit "登録する", :class => 'btn btn-primary' %>
-      <%= link_to "キャンセル", users_path, :class => 'btn btn-default' %>
+      <%= f.submit t('.submit'), :class => 'btn btn-primary' %>
     </div>
   </div>
 <% end %>

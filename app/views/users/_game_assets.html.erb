@@ -1,4 +1,14 @@
-<% @game_assets.each do |g| %>
-<%= link_to g.name, game_asset_path(g)%>
-ダウンロード：<%= g.downloaded_times %></br>
-<% end %>
+<table class="table">
+	<thead>
+		<tr><%= t('.name') %></tr>
+		<tr><%= t('.pr') %></tr>
+		<tr><%= t('.downloaded') %></tr>
+	</thead>
+    <tbody>
+    	<% @user.game_assets.each do |g| %>
+	    	<td><%= link_to g.name, game_asset_path(g) %></td>
+	        <td><%= g.sales_copy %></td>
+	    	<td><%= g.downloaded_times %></td>
+    	<% end %>
+    </tbody>
+</table>

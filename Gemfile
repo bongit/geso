@@ -1,12 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rack-secure-upload'
 gem 'aws-sdk'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
-
-# Bootstrap
 gem 'twitter-bootstrap-rails'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

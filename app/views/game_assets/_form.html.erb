@@ -1,29 +1,50 @@
 <%= form_for(@game_asset) do |f| %>
-<% if @game_asset.errors.any? %>
-  <div id="error_explanation">
-    <div class="alert alert-error">
-      入力内容に <%= pluralize(@game_asset.errors.count,"") %>つの誤りがあります。
+<!--エラーメッセージ-->
+  <% if @game_asset.errors.any? %>
+    <div id="error_explanation">
+      <div class="alert alert-error">
+        <%= pluralize(@game_asset.errors.count,"") %><%= t('.error_sub')%>
+      </div>
+      <ul>
+      <% @game_asset.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
     </div>
-    <ul>
-    <% @game_asset.errors.full_messages.each do |msg| %>
-      <li>* <%= msg %></li>
-    <% end %>
-    </ul>
-  </div>
+  <% end %>
+
+<!--入力エリア-->
+<div class="col-lg-9">
+    <%= f.label t('.name'), :class => 'control-label' %>
+    <%= f.text_field :name, :class => 'form-control' %></br>
+
+    <%= f.label t('.category_1'), :class => 'control-label' %></br>
+    <%= f.select :category_1, {"グラフィック"=>"Graphic", "コード"=>"Program"}, :class => 'form-control' %></br></br>
+
+    <%= f.label t('.sales_copy'), :class => 'control-label' %>
+    <p><%= t('.sales_copy_sub') %></p>
+    <%= f.text_field :sales_copy, :class => 'form-control' %></br>
+
+    <%= f.label t('.sales_body'), :class => 'control-label' %>
+    <p><%= t('.sales_body_sub') %></p>
+    <%= f.text_area :sales_body, :class => 'form-control', rows:10 %></br>
+
+    <%= f.label t('.sales_closing'), :class => 'control-label' %>
+    <p><%= t('.sales_closing_sub') %></p>
+    <%= f.text_area :sales_closing, :class => 'form-control', rows:5 %></br>
+
+    <%= f.label t('.thumbnail'), :class => 'control-label' %>
+    <%= f.file_field :thumbnail %></br>
+
+    <%= f.label t('.file'), :class => 'control-label' %>
+    <%= f.file_field :file %></br>
+
+    <%= f.label t('.price'), :class => 'control-label' %></br>
+    <%= f.number_field :price %><%= t('.yen') %></br></br>
+
+    <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
+    <%= button_to t('.underwrite'), '#', :class => 'btn btn-info'%></br>
 <% end %>
-<div class="field">
-  <%= f.label "商品名" %><br>
-  <%= f.text_field :name %>
 </div>
-<div class="field">
-  <%= f.label "アップロード" %><br>
-  <%= f.file_field :file %>
-</div>
-<div class="field">
-  <%= f.label "価格" %><br>
-  <%= f.number_field :price %>
-</div>
-<div class="actions">
-  <%= f.submit "登録" %>
-</div>
-<% end %>
+
+

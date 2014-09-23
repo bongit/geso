@@ -1,9 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  user_id: 1
-
-two:
-  name: MyString
-  user_id: 1
+<% 1.upto(99) do |n| %>  
+game_asset<%= n %>: 
+  id: <%= n %>
+  user_id: <%= n %>  
+  name: asset_<%= n %>
+  file_name: <%= n %>.png
+  price: <%= n %>
+  sales_copy: copy<%= n %>
+  sales_body: body<%= n %>
+  sales_closing: closing<%= n %>
+  promo_url: http://example<%= n %>.com
+  downloaded_times: 0
+  category_1: Graphic
+  category_2: Novel
+  category_3: Background
+  thumbnail_name: asset<%= n %>_thumbnail.png
+<% end %> 

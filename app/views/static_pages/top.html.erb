@@ -1,8 +1,13 @@
-
-<div class="container">
-	<h1>ゲソ丸へようこそ！</h1>
-	<p>2Dゲーム素材のマーケットプレイスです。</p>
+<div class="jumbotron">
+  	<h1><%= t('.title') %></br>
+  		<small class="text-primary"><%= t('.subtitle') %></small>
+  	</h1>
 	<%= image_tag('gesomaru.png')%>
-	<%= image_tag('takomi.png')%>
+	<%= image_tag('takomi.png')%>  	
+  	<p class="text-primary"><%= t('.sentence1') %></br>
+  	<p class="text-primary"><%= t('.sentence2') %></br>
+  	<p class="text-primary"><%= t('.sentence3') %></br></br>
+  	<% unless signed_in? %>
+		<span class='btn btn-default'><%= link_to t('.new_user'), new_user_path%></span>
+	<% end %>
 </div>
-<%= link_to "メール", :action => 'mailer'%>

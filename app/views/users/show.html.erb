@@ -1,49 +1,66 @@
 <%- model_class = User -%>
+<!-- 作者 -->
 <div class="page-header">
   <h1><%= @user.name.titleize %></h1>
 </div>
 
-<!-- 自己紹介 -->
-<div class="col-lg-9">
-  <section>
-    <%= gravatar_for @user %>
-    <!-- フォロー -->
-    <%= render 'shared/stats' %>
-    <%= render 'follow_form' if signed_in? %>
-  </section></br>
-  <section>  
-    <p>自己紹介：<%= @user.profile_text %></p>
-    <p>
-      <% if @user.url %>
-      ホームページ等：
-      <%= link_to @user.url, @user.url %>
-      <% end %>
-    </p>
-  </section>
+<div class="row">
+  <div class="col-lg-2">
+    <section>
+        <%= gravatar_for @user %>
+        <!-- フォロー -->
+        <%= render 'shared/stats' %>
+        <%= render 'follow_form' if signed_in? %>
+    </section></br>
+  </div>
 
-  <!-- 素材 -->
-  <% if @user.game_assets.any? %>
-    <div class="assets-header">
-      <h3>素材<%= @user.game_assets.count%>個</h3>
+  <div class="col-lg-9">
+    <section> 
+          <p><span class="label label-info"><%= t('.profile') %></span></p>
+          <p><%= @user.profile_text %></p>
+        <% if @user.url %>
+            <p><span class="label label-info"><%= t('.url') %></span></p>
+            <p><%= link_to @user.url, @user.url %></p>
+        <% end %>
+    </section>
+  </div>
+</div>
+
+<!-- 素材 -->
+<% if @user.game_assets.any? %>
+  <div class="page-header">
+    <h1><%= t('.asset_title') %><span class="badge badge-important"><%= @user.game_assets.count%></span><%= t('.num')%></h1>
+  </div>
+
+  <div class="row">
+    <div class="container col-lg-12">
+      <table class="table table-hover">
+        <thead>
+          <tr><%= t('.asset_name') %></tr>
+          <tr><%= t('.asset_pr') %></tr>
+          <tr><%= t('.asset_dl') %></tr>
+        </thead>
+          <% @user.game_assets.each do |g| %>
+          <tbody>
+              <td><%= link_to g.name, game_asset_path(g) %></td>
+              <td><%= g.sales_copy %></td>
+              <td><%= g.downloaded_times %></td>
+          </tbody>
+          <% end %>
+      </table>
     </div>
+  </div>
+<% end %>
 
-    <ol class="game_assets">
-      <%= render 'game_assets' %>
-    </ol>
-    <%= will_paginate @game_assets %>
-  <% end %>
-
-  <%= link_to '戻る', users_path, :class => 'btn btn-default'  %>
+  <%= link_to t('.back'), users_path, :class => 'btn btn-default'  %>
 
   <% if current_user?(@user) %>
-    <%= link_to '編集', edit_user_path(@user), :class => 'btn btn-default' %>
+    <%= link_to t('.edit'), edit_user_path(@user), :class => 'btn btn-default' %>
   <% end %>
 
   <% if current_user.admin? && !current_user?(@user) %>
-    <%= link_to t('削除', :default => t("helpers.links.destroy")),
-    user_path(@user),
+    <%= link_to t('.destroy'), user_path(@user),
     :method => 'delete',
     :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
     :class => 'btn btn-danger' %>
   <% end %>
-</div>

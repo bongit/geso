@@ -1,20 +1,39 @@
 <%- model_class = User -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+  <h1><%= t('.title') %></h1>
 </div>
-<%= will_paginate %>
+
+<!--検索フォーム-->
+<%= form_tag users_path, :method => 'get' do %>
+<div class='container'>
+  <p>
+    <div class='col-lg-6'>
+    <%= text_field_tag :search, params[:search], :class => 'form-control' %>
+  </div>
+  <div class='col-lg-4'>
+    <%= submit_tag t('.search'), :name => nil, :class => 'col-lg-2 btn btn-info' %>
+  </div>
+  </p>
+</div>
+<% end %>
+<hr>
+
+<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page') %>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th></th>
+      <th><%= t('.name') %></th>
+      <th><%= t('.pr') %></th>
     </tr>
   </thead>
   <tbody>
     <% @users.each do |user| %>
       <tr>
+        <td><%= gravatar_for user %></td>
         <td><%= link_to user.name, user_path(user) %></td>
+        <td><%= user.profile_text %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-<%= will_paginate %>

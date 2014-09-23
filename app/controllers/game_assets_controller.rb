@@ -6,13 +6,12 @@ class GameAssetsController < ApplicationController
   # GET /game_assets
   # GET /game_assets.json
   def index
-    @game_assets = GameAsset.all
+    @game_assets = GameAsset.search(params[:search]).paginate(page: params[:page], :per_page => 30)
   end
 
   # GET /game_assets/1
   # GET /game_assets/1.json
   def show
-    user=current_user
     @author=User.find_by(@game_asset.user_id)
   end
 
@@ -28,27 +27,33 @@ class GameAssetsController < ApplicationController
   # POST /game_assets
   # POST /game_assets.json
   def create
+    @game_asset = GameAsset.new(game_asset_params)
     file = game_asset_params[:file]
     name = file.original_filename
+    thumb = game_asset_params[:thumbnail]
 
     #File -> temp
-    File.open("tmp/check/#{name}", 'wb') { |f|
-      f.write(file.read)
-    }
+    File.open("tmp/check/#{name}", 'wb') do |f|
+      file.read do |chunk|
+        f.write(chunk)
+      end
+    end
 
     %x(clamscan "tmp/check/#{name}")
+
     if $? == 0
       # File -> Storage
-      @game_asset = GameAsset.new(game_asset_params)
       bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
       object = bucket.objects[Rails.application.secrets.aws_s3_dir_name + file.original_filename]
-      object.write(file ,:acl => :public_read)
+      object.write(file)
+
+      object2 = bucket.objects[Rails.application.secrets.aws_s3_dir_name2 + thumb.original_filename]
+      object2.write(thumbnail ,:acl => :public_read)
 
       # File Info -> Database
       @game_asset.user_id = current_user.id
-      @game_asset.name = game_asset_params[:name]
       @game_asset.file_name = file.original_filename
-      @game_asset.price = game_asset_params[:price]
+      @game_asset.thumbnail_name = thumb.original_filename
 
       respond_to do |format|
         if @game_asset.save
@@ -104,10 +109,8 @@ class GameAssetsController < ApplicationController
       filename: @game_asset.file_name,
       content_disposition: 'attachement'
       })
-    dt = @game_asset.downloaded_times + 1
-    if @game_asset.update_attribute(:downloaded_times, dt)
-    else
-    end
+
+    @game_asset.increment_dt
   end
 
   private
@@ -118,7 +121,7 @@ class GameAssetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def game_asset_params
-      params.require(:game_asset).permit(:file, :name, :price, :downloaded_times)
+      params.require(:game_asset).permit(:file, :name, :price, :category_1, :sales_copy, :sales_body, :sales_closing)
     end
 
     def singed_in_asset

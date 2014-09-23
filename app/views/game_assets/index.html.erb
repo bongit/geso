@@ -1,23 +1,37 @@
-<h1>素材をさがす</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>素材名</th>
-      <th>作者</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @game_assets.each do |game_asset| %>
+<div class="page-header">
+  <h1><%= t('.title')%></h1>
+</div>
+<!--検索フォーム-->
+<%= form_tag game_assets_path, :method => 'get' do %>
+<div class='container'>
+  <p>
+    <div class='col-lg-6'>
+    <%= text_field_tag :search, params[:search], :class => 'form-control' %>
+  </div>
+  <div class='col-lg-4'>
+    <%= submit_tag t('.search'), :name => nil, :class => 'col-lg-2 btn btn-info' %>
+  </div>
+  </p>
+</div>
+<% end %>
+<hr>
+<!--一覧-->
+<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page') %>
+<div class='container col-lg-12'>
+  <table class="table table-hover">
+    <thead>
       <tr>
-        <td><%= game_asset.name %></td>
-        <td><%= game_asset.user_id %></td>
-        <td><%= link_to '見る', game_asset %></td>
+        <th><%= t('.asset_name')%></th>
+        <th><%= t('.asset_copy')%></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to '素材を登録', new_game_asset_path %>
+    </thead>
+    <tbody>
+      <% @game_assets.each do |game_asset| %>
+        <tr>
+          <td><%= link_to game_asset.name, game_asset %></td>
+          <td><%= game_asset.sales_copy %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

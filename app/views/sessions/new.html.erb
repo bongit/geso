@@ -1,18 +1,20 @@
 <%= form_for(:session, url: sessions_path, :html => { :class => "form-horizontal user" }) do |f| %>
-<div class="panel-heading">
-	<h1>ログイン</h1>
+<div class="page-header">
+	<h1><%= t('.title') %></h1>
 </div>
-<div class="panel-body">
-	<div class="col-lg-6">
-		<%= f.label "メールアドレス" , :class => 'control-label' %>
-		<%= f.text_field :email, :class => 'form-control' %>
-		<%= f.label "パスワード", :class => 'control-label' %>
-		<%= f.password_field :password, :class => 'form-control' %>
-		</br>
-		<%= f.submit "ログイン", class: "btn btn-large btn-primary" %>
-	<% end %>
-		</br>
-		<p>ユーザー登録がまだの方➡<%= link_to "新規登録", signup_path %></p> 
-		<p>パスワードをお忘れですか？➡<%= link_to "パスワード再設定", 'users/forgot_password' %></p> 
-	</div>
+<div class="col-lg-6">
+	<%= f.label t('.email') , :class => 'control-label' %>
+	<%= f.text_field :email, :class => 'form-control' %>
+
+	<%= f.label t('.password'), :class => 'control-label' %>
+	<%= f.password_field :password, :class => 'form-control' %>
+</br>
+
+	<%= f.submit t('.login'), class: "btn btn-large btn-primary" %>
+</br>
+</br>
+
+	<p><%= t('.new_user') %><%= link_to t('.new_user_link'), signup_path %></p> 
+	<p><%= t('.password_forgot') %><%= link_to t('.password_forgot_link'), 'users/forgot_password' %></p> 
 </div>
+<% end %>

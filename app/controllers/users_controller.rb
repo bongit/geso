@@ -6,14 +6,14 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.paginate(page: params[:page])
+    @users = User.search(params[:search]).paginate(page: params[:page], :per_page => 30)
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
-    @game_assets = @user.game_assets.paginate(page: params[:page])
+    @game_assets = @user.game_assets
   end
 
   # GET /users/new
@@ -44,14 +44,19 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: '更新しました。' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+    if BCrypt::Password.new(@user.password_digest) == user_params[:password]
+      respond_to do |format|
+        if @user.update(user_params)
+          format.html { redirect_to @user, notice: '更新しました。' }
+          format.json { render :show, status: :ok, location: @user }
+        else
+          format.html { render :edit }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      flash.now[:error] = 'パスワードが違います。'
+      render :edit
     end
   end
 
@@ -79,9 +84,6 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
 
-  def forgot_password
-    
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

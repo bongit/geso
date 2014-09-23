@@ -4,95 +4,22 @@
     <%= render partial: "layouts/header" %>
   </head>
   <body>
-
-    <div class="navbar navbar-inverse navbar-static-top">
-      <div class="container">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <div class="navbar-collapse collapse navbar-responsive-collapse">
-        <a class="navbar-brand">
-          <%= link_to image_tag('logo_small.png'), root_path%>
-        </a>
-          <ul class="nav navbar-nav navbar-right">
-            <% if current_page?(root_path) %>
-            <li><%= link_to "ログイン", signin_path %></li>
-            <li><%= link_to "新規登録", signup_path %></li>
-            <% else %>
-            <% if signed_in? %>
-              <li><%= link_to "素材一覧", game_assets_path %></li>
-              <li><%= link_to "ユーザ一覧", users_path %></li>
-                <li id="fat-menu" class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                マイアカウント<b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><%= link_to "素材登録", new_game_asset_path %></li>
-                  <li><%= link_to "プロフィール", current_user %></li>
-                  <li><%= link_to "編集", edit_user_path(current_user)  %></li>
-                  <li class="divider"></li>
-                  <li>
-                    <%= link_to "ログアウト", signout_path, method: "delete" %>
-                  </li>
-                </ul>
-              </li>
-            <% end %>
-            <% end %>
-          </ul>
-        </div>
-      </div>
-    </div>
-
+    <%= render partial: "layouts/navbar_menu" %>
     <div class="container">
       <div class="row">
+        <div class="col-lg-3">
+        <%= render partial: "layouts/fluid_menu" %>
+        </div>
         <div class="col-lg-9">
           <%= bootstrap_flash %>
           <%= yield %>
-        </div>
-        <div class="col-lg-3">
-          <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header"><h3>メニュー</h3></li>
-              <% if signed_in? %>
-              <p><%=current_user.name%>でログイン中</p>
-              <% if current_user.admin?%>
-              <p>アドミンです。</p>
-              <% end %>
-              <li><%= link_to "素材一覧", game_assets_path %></li>
-              <li><%= link_to "ユーザ一覧", users_path %></li>
-              <li id="fat-menu" class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                   マイアカウント<b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><%= link_to "素材登録", new_game_asset_path %></li>
-                  <li><%= link_to "プロフィール", current_user %></li>
-                  <li><%= link_to "編集", edit_user_path(current_user)  %></li>
-                  <li class="divider"></li>
-                  <li>
-                    <%= link_to "ログアウト", signout_path, method: "delete" %>
-                  </li>
-                </ul>
-              </li>
-              <% else %>
-              <li><%= link_to "ログイン", signin_path %></li>
-              <li><%= link_to "新規登録", signup_path %></li>
-              <% end %>
-            </ul>
-          </div><!--/.well -->
         </div><!--/span-->
       </div><!--/row-->
-
       <footer>
         <hr>
         <p>&copy; App Dente 2014</p>
       </footer>
-
       <%= debug(params) if Rails.env.development? %>
-
     </div> <!-- /container -->
-
   </body>
 </html>
