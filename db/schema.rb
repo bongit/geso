@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140920072734) do
+ActiveRecord::Schema.define(version: 20140923093832) do
+
+  create_table "categories", force: true do |t|
+    t.integer  "game_asset_id"
+    t.string   "main_category"
+    t.string   "sub_category"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "game_assets", force: true do |t|
     t.string   "name"
@@ -25,9 +33,6 @@ ActiveRecord::Schema.define(version: 20140920072734) do
     t.string   "sales_closing"
     t.string   "promo_url"
     t.integer  "downloaded_times",           default: 0, null: false
-    t.string   "category_1"
-    t.string   "category_2"
-    t.string   "category_3"
     t.integer  "rating"
     t.string   "thumbnail_name"
   end
@@ -44,6 +49,15 @@ ActiveRecord::Schema.define(version: 20140920072734) do
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
   add_index "relationships", ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true, using: :btree
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
+
+  create_table "reviews", force: true do |t|
+    t.integer  "game_asset_id"
+    t.integer  "reviewer_id"
+    t.integer  "rating"
+    t.string   "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "name"

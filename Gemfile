@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'cells'
 gem 'aws-sdk'
 gem 'faker'
 gem 'will_paginate'
