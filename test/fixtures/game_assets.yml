@@ -12,8 +12,6 @@ game_asset<%= n %>:
   sales_closing: closing<%= n %>
   promo_url: http://example<%= n %>.com
   downloaded_times: 0
-  category_1: NovelGame
-  category_2: Graphic
-  category_3: Background
-  thumbnail_name: asset<%= n %>_thumbnail.png
+  main_category: 1
+  sub_category: 4
 <% end %> 

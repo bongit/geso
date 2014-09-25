@@ -18,12 +18,12 @@
 
       <%= f.label t('.url'), :class => 'control-label' %>
       <%= f.text_field :url, :class => 'form-control' %>
-      <%= error_span(@user[:url]) %>
+      <%= error_span(@user[:url]) %><hr>
 
       <%= f.label t('.password'), :class => 'control-label' %>
       <%= f.password_field :password, :class => 'form-control' %>
-      <%= error_span(@user[:password]) %>
-      </br>
+      <%= error_span(@user[:password]) %><br>
+      
       <%= f.submit t('.submit'), :class => 'btn btn-primary' %>
     </div>
   </div>

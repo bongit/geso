@@ -1,18 +1,44 @@
 <p id="notice"><%= notice %></p>
-  <strong>名前:</strong>
-  <%= @game_asset.name %>
-</br>
-  <strong>作者:</strong>
-  <%= link_to @author.name, user_path(@author) %>
-</br>
-  <strong>価格:</strong>
-  <%= @game_asset.price %>
-</br>
-  <strong>ダウンロード数:</strong>
-  <%= @game_asset.downloaded_times %>
-</br>
+<div class="page-header">
+  <h1><%= @game_asset.name.titleize %></h1>
+</div>
 
-<%= link_to 'Edit', edit_game_asset_path(@game_asset) %>
-<%= link_to 'Destroy', @game_asset, method: :delete, data: { confirm: 'Are you sure?' } %>
-<%= link_to 'Back', game_assets_path %>
-<%= link_to 'Download', :action => 'download' %>
+<div class="row">
+  <div class="col-lg-4">
+  	<%= image_tag "thumbs/thumbnail_#{@game_asset.id}.png", :width => '300', :height => '300' %>
+  </div>
+  <div class="col-lg-8">
+	<h3>商品情報</h3><hr>
+	  <section>
+	  	<p><span class="label label-success">商品説明</span></p>  
+	  	<p><strong><%= @game_asset.sales_copy %></strong></p>
+	  	<p><%= @game_asset.sales_body %></p>
+	    <p><%= @game_asset.sales_closing %></p>
+	    <p><span class="label label-warning">リンク</span></p>
+	    <p><%= link_to @game_asset.promo_url, @game_asset.promo_url %></p>
+	  </section>
+	  <section>
+	  	<p><span class="label label-info">作者</span>  <%= link_to @author.name, user_path(@author) %></p>
+	  	<p><span class="label label-info">ダウンロード数</span>  <%= @game_asset.downloaded_times %></p>
+	  	<p><span class="label label-info">価格</span>  <%= @game_asset.price %></p>
+	  </section>
+	  <% if @game_asset.reviews.any? %>
+	  <hr><h3>レビュー</h3>
+	  	<% @game_asset.reviews.each do |review| %>
+      	<table class="table table-hover">
+	  		<thead>
+	  			<th>評価</th>
+	  			<th>コメント</th>
+	  			<th>レビュアー</th>
+	  		</thead>
+	  		<tbody>
+	  			<td><%= review.rating %></td>
+	  			<td><%= review.text %></td>
+	  			<td><%= User.find(review.reviewer_id).name %></td>
+	  		</tbody>
+	  	</table>
+	  	<% end %>
+	  <% end %>
+  	<%= link_to 'Download', :action => 'download' %>
+</div>
+

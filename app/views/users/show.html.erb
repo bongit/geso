@@ -3,7 +3,6 @@
 <div class="page-header">
   <h1><%= @user.name.titleize %></h1>
 </div>
-
 <div class="row">
   <div class="col-lg-2">
     <section>
@@ -25,20 +24,18 @@
     </section>
   </div>
 </div>
-
 <!-- 素材 -->
 <% if @user.game_assets.any? %>
   <div class="page-header">
     <h1><%= t('.asset_title') %><span class="badge badge-important"><%= @user.game_assets.count%></span><%= t('.num')%></h1>
   </div>
-
   <div class="row">
     <div class="container col-lg-12">
       <table class="table table-hover">
         <thead>
-          <tr><%= t('.asset_name') %></tr>
-          <tr><%= t('.asset_pr') %></tr>
-          <tr><%= t('.asset_dl') %></tr>
+          <th><%= t('.asset_name') %></th>
+          <th><%= t('.asset_pr') %></th>
+          <th><%= t('.asset_dl') %></th>
         </thead>
           <% @user.game_assets.each do |g| %>
           <tbody>

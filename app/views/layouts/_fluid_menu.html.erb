@@ -3,31 +3,26 @@
     <li class="nav-header"><h3><%= t('.title') %></h3></li>
     <hr>
     <% if signed_in? %>
-    <p><%=current_user.name%><%= t('.now_login') %></p>
-    <% if current_user.admin?%>
-    <p><%= t('.admin') %></p>
-    <% end %>
-    <li><%= link_to t('.asset_list'), game_assets_path %></li>
-      <ul class "nav nav-list">
-      </ul>
-    <li><%= link_to t('.user_list'), users_path %></li>
-    <li id="fat-menu" class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-         <%= t('.my_account') %><b class="caret"></b>
-      </a>
-      <ul class="dropdown-menu">
-        <li><%= link_to t('.new_asset'), new_game_asset_path %></li>
-        <li><%= link_to t('.show_user'), current_user %></li>
-        <li><%= link_to t('.edit_user'), edit_user_path(current_user)  %></li>
-        <li class="divider"></li>
-        <li>
-          <%= link_to t('.logout'), signout_path, method: "delete" %>
-        </li>
-      </ul>
-    </li>
+      <p><%=current_user.name%><%= t('.now_login') %></p>
+        <% if current_user.admin?%>
+        <p><%= t('.admin') %></p>
+        <% end %>
+        <hr>
+      <li><strong><%= link_to t('.asset_list'), game_assets_path %></strong></li>
+      <li><%= link_to "グラフィック素材", "#" %></li>
+      <li><%= link_to "プログラム素材", "#" %></li>
+      <li><%= link_to "サウンド素材", "#" %></li>
+      <hr>
+      <li><strong><%= link_to t('.user_list'), users_path %></strong></li>
+      <hr>
+      <li><strong>マイアカウント</strong></li>
+      <li><%= link_to t('.new_asset'), new_game_asset_path %></li>
+      <li><%= link_to t('.show_user'), current_user %></li>
+      <li><%= link_to t('.edit_user'), edit_user_path(current_user)  %></li>
+      <li><%= link_to t('.logout'), signout_path, method: "delete" %></li>
     <% else %>
-    <li><%= link_to t('.login'), signin_path %></li>
-    <li><%= link_to t('.new_user'), signup_path %></li>
+      <li><%= link_to t('.login'), signin_path %></li>
+      <li><%= link_to t('.new_user'), signup_path %></li>
     <% end %>
   </ul>
 </div><!--/.well -->

@@ -1,13 +1,10 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  game_asset_id: 1
-  reviewer_id: 1
-  rating: 1
-  text: MyString
-
-two:
-  game_asset_id: 1
-  reviewer_id: 1
-  rating: 1
-  text: MyString
+<% 1.upto(99) do |n| %>
+review<%= n %>:
+  id: <%= n %>
+  game_asset_id: <%= n %>
+  reviewer_id: <%= 100-n %>
+  rating: 5
+  text: very good.
+<% end %>

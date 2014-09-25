@@ -12,7 +12,7 @@ class GameAssetsController < ApplicationController
   # GET /game_assets/1
   # GET /game_assets/1.json
   def show
-    @author=User.find_by(@game_asset.user_id)
+    @author = User.find(@game_asset[:user_id])
   end
 
   # GET /game_assets/new
@@ -28,47 +28,59 @@ class GameAssetsController < ApplicationController
   # POST /game_assets.json
   def create
     @game_asset = GameAsset.new(game_asset_params)
-    file = game_asset_params[:file]
-    name = file.original_filename
-    thumb = game_asset_params[:thumbnail]
 
-    #File -> temp
-    File.open("tmp/check/#{name}", 'wb') do |f|
-      file.read do |chunk|
+    #Thumbnail -> assets
+    thumb = game_asset_params[:thumbnail]
+    tmp_thumb_path = "tmp/thumbnail_101.png"
+    File.open(tmp_thumb_path, 'wb') do |f|
+      thumb.read do |chunk|
         f.write(chunk)
       end
     end
-
-    %x(clamscan "tmp/check/#{name}")
+    %x(clamscan tmp_thumb_path)
 
     if $? == 0
-      # File -> Storage
-      bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
-      object = bucket.objects[Rails.application.secrets.aws_s3_dir_name + file.original_filename]
-      object.write(file)
+    %x(cp "tmp/thumbnail_101.png" "assets/images/thumbs/thumbnail_101.png")
 
-      object2 = bucket.objects[Rails.application.secrets.aws_s3_dir_name2 + thumb.original_filename]
-      object2.write(thumbnail ,:acl => :public_read)
-
-      # File Info -> Database
-      @game_asset.user_id = current_user.id
-      @game_asset.file_name = file.original_filename
-      @game_asset.thumbnail_name = thumb.original_filename
-
-      respond_to do |format|
-        if @game_asset.save
-          format.html { redirect_to @game_asset, notice: '素材の登録が完了しました。' }
-          format.json { render :show, status: :created, location: @game_asset }
-        else
-          format.html { render :new , notice: '値が正しくありません。'}
-          format.json { render json: @game_asset.errors, status: :unprocessable_entity }
+      #File -> temp
+      file = game_asset_params[:file]
+      name = file.original_filename
+      File.open("tmp/check/#{name}", 'wb') do |f|
+        file.read do |chunk|
+          f.write(chunk)
         end
       end
+      %x(clamscan "tmp/check/#{name}")
+
+      if $? == 0
+        # File -> Storage
+        bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
+        object = bucket.objects[Rails.application.secrets.aws_s3_dir_name + file.original_filename]
+        object.write(file)
+
+        # File Info -> Database
+        @game_asset.user_id = current_user.id
+        @game_asset.file_name = file.original_filename
+
+        respond_to do |format|
+          if @game_asset.save
+            format.html { redirect_to @game_asset, notice: '素材の登録が完了しました。' }
+            format.json { render :show, status: :created, location: @game_asset }
+          else
+            format.html { render :new , notice: '値が正しくありません。'}
+            format.json { render json: @game_asset.errors, status: :unprocessable_entity }
+          end
+        end
+
+      else
+        redirect_to new_game_asset_path, alert: 'アップロードに失敗しました。素材ファイルがウイルスに感染している疑いがあります。' 
+      end
+      %x(rm -rf "tmp/check/#{name}")
 
     else
-      redirect_to new_game_asset_path, alert: 'アップロードに失敗しました。ファイルがウイルスに感染している疑いがあります。' 
+      redirect_to new_game_asset_path, alert: 'アップロードに失敗しました。サムネイルがウイルスに感染している疑いがあります。' 
     end
-    %x(rm -rf "tmp/check/#{name}")
+      %x(rm -rf "tmp/thumbnail_#{current_user.id}.png")
 
   end
 
@@ -121,7 +133,8 @@ class GameAssetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def game_asset_params
-      params.require(:game_asset).permit(:file, :name, :price, :category_1, :sales_copy, :sales_body, :sales_closing)
+      params.require(:game_asset).permit(:name, :price, :main_category, :sub_category, 
+        :sales_copy, :sales_body, :sales_closing, :file, :thumbnail, :screenshots)
     end
 
     def singed_in_asset

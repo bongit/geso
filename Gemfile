@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'rmagick'
+gem 'carrierwave''
 gem 'cells'
 gem 'aws-sdk'
 gem 'faker'

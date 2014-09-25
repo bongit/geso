@@ -16,11 +16,12 @@
 <% end %>
 <hr>
 <!--一覧-->
-<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page') %>
 <div class='container col-lg-12'>
+<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page') %>
   <table class="table table-hover">
     <thead>
       <tr>
+        <th></th>
         <th><%= t('.asset_name')%></th>
         <th><%= t('.asset_copy')%></th>
       </tr>
@@ -28,10 +29,13 @@
     <tbody>
       <% @game_assets.each do |game_asset| %>
         <tr>
+          <td><%= image_tag "thumbs/thumbnail_#{game_asset.id}.png", :width => '100', :height => '100' %></td>
           <td><%= link_to game_asset.name, game_asset %></td>
           <td><%= game_asset.sales_copy %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
+<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page') %>
 </div>
+

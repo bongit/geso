@@ -11,17 +11,27 @@
       </a>
       <ul class="nav navbar-nav navbar-right">
         <% if signed_in? %>
-          <li><%= link_to t('.asset_list'), game_assets_path %></li>
-          <li><%= link_to t('.user_list'), users_path %></li>
           <li id="fat-menu" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <%= t('.my_account') %><b class="caret"></b>
-            </a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">素材を探す<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to t('.asset_list'), game_assets_path %></li>
+              <li><%= link_to "グラフィック素材", "#" %></li>
+              <li><%= link_to "プログラム素材", "#" %></li>
+              <li><%= link_to "サウンド素材", "#" %></li>
+            </ul>
+          </li>
+          <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">ユーザーを探す<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to t('.user_list'), users_path %></li>
+            </ul>
+          </li>
+          <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('.my_account') %><b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><%= link_to t('.new_asset'), new_game_asset_path %></li>
               <li><%= link_to t('.show_user'), current_user %></li>
               <li><%= link_to t('.edit_user'), edit_user_path(current_user)  %></li>
-              <li class="divider"></li>
               <li><%= link_to t('.logout'), signout_path, method: "delete" %></li>
             </ul>
           </li>
