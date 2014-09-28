@@ -2,15 +2,21 @@ Rails.application.routes.draw do
   root 'static_pages#top'
   resources :game_assets do
     member do
-      get 'download'
+      get :download
+    end
+    collection do
+      get :filtered_index
     end
   end
   resources :users do
     member do
       get :following, :followers
+      get :edit_new_password
+      patch :update_password
     end
     collection do
       get :forgot_password
+      post :send_password_reset
     end
   end
   resources :relationships, only: [:create, :destroy]

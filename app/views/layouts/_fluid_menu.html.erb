@@ -9,20 +9,21 @@
         <% end %>
         <hr>
       <li><strong><%= link_to t('.asset_list'), game_assets_path %></strong></li>
-      <li><%= link_to "グラフィック素材", "#" %></li>
-      <li><%= link_to "プログラム素材", "#" %></li>
-      <li><%= link_to "サウンド素材", "#" %></li>
-      <hr>
-      <li><strong><%= link_to t('.user_list'), users_path %></strong></li>
-      <hr>
+          <li><%= link_to "グラフィック素材", controller: "game_assets", action: "index", main_category: "Graphic" %></li>
+          <li><%= link_to "プログラム素材", controller: "game_assets", action: "index", main_category: "Code" %></li %></li>
+          <li><%= link_to "サウンド素材", controller: "game_assets", action: "index", main_category: "Sound" %></li %></li><hr>
+
+      <li><strong><%= link_to t('.user_list'), users_path %></strong></li><hr>
+
       <li><strong>マイアカウント</strong></li>
-      <li><%= link_to t('.new_asset'), new_game_asset_path %></li>
-      <li><%= link_to t('.show_user'), current_user %></li>
-      <li><%= link_to t('.edit_user'), edit_user_path(current_user)  %></li>
-      <li><%= link_to t('.logout'), signout_path, method: "delete" %></li>
+        <li><%= link_to t('.new_asset'), new_game_asset_path %></li>
+        <li><%= link_to t('.show_user'), current_user %></li>
+        <li><%= link_to t('.edit_user'), edit_user_path(current_user)  %></li>
+        <li><%= link_to t('.logout'), signout_path, method: "delete" %></li>
     <% else %>
       <li><%= link_to t('.login'), signin_path %></li>
       <li><%= link_to t('.new_user'), signup_path %></li>
+      <li><%= link_to "パスワードを忘れたときは", '/users/forgot_password' %></li>
     <% end %>
   </ul>
 </div><!--/.well -->

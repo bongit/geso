@@ -84,6 +84,32 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
 
+  # Password
+  # GET /users/forgot_password
+  def send_password_reset
+    @address = params[:address]
+    SystemMailer.password_reset(@address).deliver
+    redirect_to root_path, notice: "確認用メールをお送りしました。"
+  end
+
+  # GET /users/1/new_password
+  def edit_new_password
+    @user = User.find(params[:id])
+  end
+
+  # PATCH /users/1/update_password
+  def update_password
+    @user = User.find(params[:id])
+    respond_to do |format|
+      if @user.update(user_params)
+        format.html { redirect_to '/signin', notice: 'パスワードを変更しました。' }
+        format.json { render '/signin', status: :created, location: root_path }
+      else
+        format.html { render :edit_new_password }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

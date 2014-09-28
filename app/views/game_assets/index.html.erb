@@ -5,8 +5,13 @@
 <%= form_tag game_assets_path, :method => 'get' do %>
 <div class='container'>
   <p>
-    <div class='col-lg-6'>
+    <div class='col-lg-4'>
     <%= text_field_tag :search, params[:search], :class => 'form-control' %>
+  </div>
+  <div class="col-lg-2">
+    <%= select_tag(:main_category,  options_for_select(
+    [['グラフィック', 'Graphic'],['コード','Code']], params[:main_category]
+    ), :include_blank => true, :class =>'form-control')%>
   </div>
   <div class='col-lg-4'>
     <%= submit_tag t('.search'), :name => nil, :class => 'col-lg-2 btn btn-info' %>
@@ -21,21 +26,24 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th></th>
-        <th><%= t('.asset_name')%></th>
+        <th>サムネイル</th>
+        <th><%= t('.asset_name') %></br>作者名</th>
         <th><%= t('.asset_copy')%></th>
+        <th>ダウンロード数</br>価格</br>評価</th>
       </tr>
     </thead>
     <tbody>
       <% @game_assets.each do |game_asset| %>
         <tr>
           <td><%= image_tag "thumbs/thumbnail_#{game_asset.id}.png", :width => '100', :height => '100' %></td>
-          <td><%= link_to game_asset.name, game_asset %></td>
+          <td>商品名：<%= link_to game_asset.name, game_asset %></br>作者：<%= User.find(game_asset.user_id).name %></td>
           <td><%= game_asset.sales_copy %></td>
+          <td>DL：<%= game_asset.downloaded_times %></br>価格：<%= game_asset.price %>円</br>評価：<%= game_asset.rating %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
 <%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page') %>
 </div>
+
 

@@ -38,6 +38,7 @@
         <% else %>
           <li><%= link_to t('.login'), signin_path %></li>
           <li><%= link_to t('.new_user'), signup_path %></li>
+          <li><%= link_to "パスワードを忘れたときは", '/users/forgot_password' %></li>
         <% end %>
       </ul>
     </div>

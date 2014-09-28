@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
+gem 'better_errors'
+gem 'binding_of_caller'
 gem 'rmagick'
-gem 'carrierwave''
 gem 'cells'
 gem 'aws-sdk'
 gem 'faker'

@@ -1,3 +1,5 @@
+<p>＊アップロードにはかなり時間がかかります。気長にお待ち下さい。</p>
+
 <%= form_for(@game_asset) do |f| %>
 <!--エラーメッセージ-->
   <% if @game_asset.errors.any? %>
@@ -14,15 +16,15 @@
   <% end %>
 <!--入力エリア-->
 <div class="col-lg-9">
-    <h3>商品情報 概要</h3><hr>
-    <%= f.label "カテゴリ" %>
-    <%= f.select :main_category, {"グラフィック"=>'Graphic', "コード"=>'Code'} %>
+    <h3>関連ファイル</h3><hr>
+    <%= f.label t('.thumbnail'), :class => 'control-label' %>
+    <%= f.file_field :thumbnail %></br>
 
-    <%= f.label t('.name'), :class => 'control-label' %>
-    <%= f.text_field :name, :class => 'form-control' %></br>
+    <%= f.label "スクリーンショット（３枚まで）", :class => 'control-label' %>
+    <%= f.file_field :screenshots %></br>
 
-    <%= f.label t('.price'), :class => 'control-label' %></br>
-    <%= f.number_field :price %><%= t('.yen') %></br></br>
+    <%= f.label t('.file'), :class => 'control-label' %>
+    <%= f.file_field :file %></br>
 
     <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
     <%= button_to t('.underwrite'), '#', :class => 'btn btn-info'%></br>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140924051038) do
+ActiveRecord::Schema.define(version: 20140927073643) do
 
   create_table "categories", force: true do |t|
     t.datetime "created_at"
@@ -26,15 +26,16 @@ ActiveRecord::Schema.define(version: 20140924051038) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "file_name"
-    t.integer  "price",            limit: 3, default: 0, null: false
+    t.integer  "price",            limit: 3, default: 0,     null: false
     t.string   "sales_copy"
     t.string   "sales_body"
     t.string   "sales_closing"
     t.string   "promo_url"
-    t.integer  "downloaded_times",           default: 0, null: false
+    t.integer  "downloaded_times",           default: 0,     null: false
     t.integer  "rating"
     t.string   "main_category"
     t.string   "sub_category"
+    t.boolean  "public",                     default: false
   end
 
   add_index "game_assets", ["name"], name: "index_game_assets_on_name", using: :btree
