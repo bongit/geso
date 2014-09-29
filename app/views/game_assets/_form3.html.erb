@@ -1,0 +1,31 @@
+<p>＊アップロードにはかなり時間がかかります。気長にお待ち下さい。</p>
+
+<%= form_for(@game_asset) do |f| %>
+<!--エラーメッセージ-->
+  <% if @game_asset.errors.any? %>
+    <div id="error_explanation">
+      <div class="alert alert-error">
+        <%= pluralize(@game_asset.errors.count,"") %><%= t('.error_sub')%>
+      </div>
+      <ul>
+      <% @game_asset.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<!--入力エリア-->
+<div class="col-lg-9">
+    <h3>関連ファイル</h3><hr>
+    <%= f.label t('.thumbnail'), :class => 'control-label' %>
+    <%= f.file_field :thumbnailm, :onchange=>{:disabled => true}%></br>
+
+    <%= f.label "スクリーンショット（３枚まで）", :class => 'control-label' %>
+    <%= f.file_field :screenshots %></br>
+
+    <%= f.label t('.file'), :class => 'control-label' %>
+    <%= f.file_field :file %></br>
+
+    <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
+<% end %>
+</div>

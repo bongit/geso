@@ -3,9 +3,10 @@ Rails.application.routes.draw do
   resources :game_assets do
     member do
       get :download
-    end
-    collection do
-      get :filtered_index
+      get :edit2
+      get :edit3
+      match '', to: 'game_assets#step2', via: 'patch'
+      match '', to: 'game_assets#step3', via: 'patch'
     end
   end
   resources :users do

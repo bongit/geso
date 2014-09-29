@@ -15,8 +15,8 @@
 <!--入力エリア-->
 <div class="col-lg-9">
     <h3>商品情報 概要</h3><hr>
-    <%= f.label "カテゴリ" %>
-    <%= f.select :main_category, {"グラフィック"=>'Graphic', "コード"=>'Code'} %>
+    <%= f.label "カテゴリ", :class => 'control-label' %></br>
+    <%= f.select :main_category, {"グラフィック"=>'Graphic', "コード"=>'Code'}, :class => 'form-control' %></br></br>
 
     <%= f.label t('.name'), :class => 'control-label' %>
     <%= f.text_field :name, :class => 'form-control' %></br>
@@ -24,7 +24,8 @@
     <%= f.label t('.price'), :class => 'control-label' %></br>
     <%= f.number_field :price %><%= t('.yen') %></br></br>
 
+    <%= f.hidden_field :make_public, :value => 0 %>
+
     <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
-    <%= button_to t('.underwrite'), '#', :class => 'btn btn-info'%></br>
 <% end %>
 </div>

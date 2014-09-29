@@ -6,5 +6,5 @@ review<%= n %>:
   game_asset_id: <%= n %>
   reviewer_id: <%= 100-n %>
   rating: 5
-  text: very good.
+  text: very good. Hoge hoge.
 <% end %>

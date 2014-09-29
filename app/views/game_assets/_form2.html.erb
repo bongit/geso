@@ -14,11 +14,17 @@
   <% end %>
 <!--入力エリア-->
 <div class="col-lg-9">
-    <h3>商品情報 概要</h3><hr>
+<ol class="breadcrumb">
+  <li>STEP1: 仮登録</li>
+  <li class="active">STEP2: 商品説明</li>
+  <li>STEP3: ファイルのアップロード</li>
+</ol>
+    <h3>仮登録情報</h3><hr>
+    <div class="well">
     名前：　<%= @game_asset.name %></br>
     価格：　<%= @game_asset.price %></br>
     カテゴリ：　<%= @game_asset.main_category %></br>
-
+    </div>
     <h3>商品情報　詳細</h3><hr>
     <%= f.label "タイプ" %>
     <%= f.select :sub_category, {"背景"=>'background'} %></br></br>
@@ -35,7 +41,6 @@
     <p><%= t('.sales_closing_sub') %></p>
     <%= f.text_area :sales_closing, :class => 'form-control', rows:5 %></br>
 
-    <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
-    <%= button_to t('.underwrite'), '#', :class => 'btn btn-info'%></br>
+    <%= f.submit t('.submit'), :action => 'step2', :method => :patch , :class => 'btn btn-primary'%></br></br>
 <% end %>
 </div>

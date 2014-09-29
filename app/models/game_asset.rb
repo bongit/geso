@@ -8,22 +8,31 @@ class GameAsset < ActiveRecord::Base
 	validates :user_id, presence: true
 	validates :price, numericality: {:only_integer => true, :greater_than_or_equal_to => 0}
 
-	# Scope
-	default_scope -> { order('created_at DESC') }
-
 	attr_accessor :file, :screenshots, :thumbnail
 	
 	# Methods
-	def self.search(search_word, main_category) #self.でクラスメソッドとしている
-    	if search_word && main_category
-    		GameAsset.where(main_category: main_category).where(['name LIKE ?', "%#{search_word}%"])
-    	elsif search_word && main_category == nil
-    		GameAsset.where(['name LIKE ?', "%#{search_word}%"])
-    	elsif search_word == nil && main_category
-    		GameAsset.where(main_category: main_category)
-    	else
-   			GameAsset.all #全て表示。
-  		end
+	def self.search(search_word, main_category, sub_category) #self.でクラスメソッドとしている
+		if search_word
+			if main_category != "" && main_category != nil
+				if sub_category != "" && main_category != nil
+		    		GameAsset.where(make_public: 1).where(main_category: main_category).where(sub_category: sub_category).where(['name LIKE ?', "%#{search_word}%"])
+		    	else
+		    		GameAsset.where(make_public: 1).where(main_category: main_category).where(['name LIKE ?', "%#{search_word}%"])
+		    	end
+			else
+				GameAsset.where(make_public: 1).where(['name LIKE ?', "%#{search_word}%"])
+			end
+		else
+			if main_category != "" && main_category != nil
+				if sub_category != "" && main_category != nil
+		    		GameAsset.where(make_public: 1).where(main_category: main_category).where(sub_category: sub_category)
+		    	else
+		    		GameAsset.where(make_public: 1).where(main_category: main_category)
+		    	end
+			else
+				GameAsset.all
+			end
+		end
 	end
 
 	def increment_dt

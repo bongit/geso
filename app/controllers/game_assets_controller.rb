@@ -7,7 +7,17 @@ class GameAssetsController < ApplicationController
   # GET /game_assets.json
   def index
     # 設定
-    @game_assets = GameAsset.search(params[:search], params[:main_category]).paginate(page: params[:page], :per_page => 30)
+    if params[:order] == nil || params[:order] == ""
+      params[:order] = "created_at desc"
+    end
+
+    @game_assets = GameAsset.search(params[:search], params[:main_category], params[:sub_category]).order("#{params[:order]}").paginate(page: params[:page], :per_page => 25)
+
+    if  params[:main_category] != ""
+      @main_category = params[:main_category]
+      @sub_categories = SubCategory.sub_for(params[:main_category])
+      @sub_category = params[:sub_category]
+    end
   end
 
   # GET /game_assets/1
@@ -26,6 +36,14 @@ class GameAssetsController < ApplicationController
   def edit
   end
 
+  def edit2
+    @game_asset = GameAsset.find(params[:id])
+  end
+
+  def edit3
+    @game_asset = GameAsset.find(params[:id])
+  end
+
   # POST /game_assets
   # POST /game_assets.json
   def create
@@ -34,10 +52,10 @@ class GameAssetsController < ApplicationController
 
       respond_to do |format|
         if @game_asset.save
-          format.html { redirect_to "/game_assets/#{@game_asset.id}/edit", notice: '素材の仮登録が完了しました。引き続き情報を入力して下さい。' }
+          format.html { redirect_to "/game_assets/#{@game_asset.id}/edit2", notice: '素材の仮登録が完了しました。引き続き情報を入力して下さい。' }
           format.json { render :show, status: :created, location: @game_asset }
         else
-          format.html { render :new , notice: '値が正しくありません。'}
+          format.html { render :edit2, notice: '値が正しくありません。'}
           format.json { render json: @game_asset.errors, status: :unprocessable_entity }
         end
       end
@@ -52,6 +70,32 @@ class GameAssetsController < ApplicationController
         format.json { render :show, status: :ok, location: @game_asset }
       else
         format.html { render :edit }
+        format.json { render json: @game_asset.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def step2
+    @game_asset = GameAsset.find(params[:id])
+    respond_to do |format|
+      if @game_asset.update(game_asset_params)
+        format.html { redirect_to "/game_assets/#{@game_asset.id}/edit3", notice: '商品情報の登録が完了しました。素材ファイルをアップロードして下さい。' }
+        format.json { render :edit3, status: :ok, location: @game_asset }
+      else
+        format.html { render :edit3, notice: '値が正しくありません。'}
+        format.json { render json: @game_asset.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def step3
+    @game_asset = GameAsset.find(params[:id])
+    respond_to do |format|
+      if @game_asset.save(game_asset_params)
+        format.html { redirect_to "/game_assets/#{@game_asset.id}/edit3", notice: '商品情報の登録が完了しました。素材ファイルをアップロードして下さい。' }
+        format.json { render :show, status: :ok, location: @game_asset }
+      else
+        format.html { render :show, notice: '値が正しくありません。'}
         format.json { render json: @game_asset.errors, status: :unprocessable_entity }
       end
     end
@@ -145,7 +189,7 @@ class GameAssetsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def game_asset_params
       params.require(:game_asset).permit(:name, :price, :main_category, :sub_category, 
-        :sales_copy, :sales_body, :sales_closing, :file, :thumbnail, :screenshots)
+        :sales_copy, :sales_body, :sales_closing, :file, :thumbnail, :screenshots, :order)
     end
 
     def singed_in_asset

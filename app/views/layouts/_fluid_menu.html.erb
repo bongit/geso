@@ -9,9 +9,9 @@
         <% end %>
         <hr>
       <li><strong><%= link_to t('.asset_list'), game_assets_path %></strong></li>
-          <li><%= link_to "グラフィック素材", controller: "game_assets", action: "index", main_category: "Graphic" %></li>
-          <li><%= link_to "プログラム素材", controller: "game_assets", action: "index", main_category: "Code" %></li %></li>
-          <li><%= link_to "サウンド素材", controller: "game_assets", action: "index", main_category: "Sound" %></li %></li><hr>
+          <li><%= link_to "グラフィック素材", controller: "game_assets", action: "index", main_category: "1", sub_category: "" %></li>
+          <li><%= link_to "プログラム素材", controller: "game_assets", action: "index", main_category: "2", sub_category: "" %></li %></li>
+          <li><%= link_to "サウンド素材", controller: "game_assets", action: "index", main_category: "3", sub_category: "" %></li %></li><hr>
 
       <li><strong><%= link_to t('.user_list'), users_path %></strong></li><hr>
 

@@ -1,0 +1,26 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+1:
+  id: 1
+  name: Background
+  parent_id: 1
+2:
+  id: 2
+  name: Sprite
+  parent_id: 1
+3:
+  id: 3
+  name: Snipet
+  parent_id: 2
+4:
+  id: 4
+  name: App
+  parent_id: 2
+5:
+  id: 5
+  name: Sound
+  parent_id: 3
+6:
+  id: 6
+  name: Music
+  parent_id: 4
