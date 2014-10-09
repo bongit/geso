@@ -48,7 +48,7 @@
     <tbody>
       <% @game_assets.each do |game_asset| %>
         <tr>
-          <td><%= image_tag "thumbs/thumbnail_#{game_asset.id}.png", :width => '100', :height => '100' %></td>
+          <td><%= image_tag "/assets/thumbs/thumbnail_#{game_asset.id}.png", :width => '100', :height => '100' %></td>
           <td>商品名：<%= link_to game_asset.name, game_asset %></br>作者：<%= User.find(game_asset.user_id).name %></td>
           <td><%= game_asset.sales_copy %></td>
           <td>DL：<%= game_asset.downloaded_times %></br>価格：<%= game_asset.price %>円</br>評価：<%= game_asset.rating %></td>

@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929054231) do
+ActiveRecord::Schema.define(version: 20141009052343) do
+
+  create_table "bought_assets", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "game_asset_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "categories", force: true do |t|
     t.datetime "created_at"

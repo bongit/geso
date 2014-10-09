@@ -19,6 +19,7 @@
         <li><%= link_to t('.new_asset'), new_game_asset_path %></li>
         <li><%= link_to t('.show_user'), current_user %></li>
         <li><%= link_to t('.edit_user'), edit_user_path(current_user)  %></li>
+        <li><%= link_to '購入履歴', '/bought_assets/index' %> </li>
         <li><%= link_to t('.logout'), signout_path, method: "delete" %></li>
     <% else %>
       <li><%= link_to t('.login'), signin_path %></li>

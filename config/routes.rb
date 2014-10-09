@@ -3,10 +3,10 @@ Rails.application.routes.draw do
   resources :game_assets do
     member do
       get :download
-      get :edit2
-      get :edit3
-      match '', to: 'game_assets#step2', via: 'patch'
-      match '', to: 'game_assets#step3', via: 'patch'
+      get :review_new
+    end
+    collection do
+      post :thumbnail_check
     end
   end
   resources :users do
@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
   get 'static_pages/mailer'
+  get '/bought_assets/index'
+  resources :reviews, only:[:create]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

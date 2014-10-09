@@ -1,0 +1,5 @@
+<h1>BoughtAssets#index</h1>
+<% @bought_assets.each do |ba| %>
+<%= link_to GameAsset.find(ba.game_asset_id).name, "/game_assets/#{ba.game_asset_id}" %>
+<%= link_to 'レビューを書く', "/game_assets/#{ba.game_asset_id}/review_new" %></br>
+<% end %>

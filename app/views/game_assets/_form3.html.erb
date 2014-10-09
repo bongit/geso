@@ -1,5 +1,3 @@
-<p>＊アップロードにはかなり時間がかかります。気長にお待ち下さい。</p>
-
 <%= form_for(@game_asset) do |f| %>
 <!--エラーメッセージ-->
   <% if @game_asset.errors.any? %>
@@ -16,16 +14,17 @@
   <% end %>
 <!--入力エリア-->
 <div class="col-lg-9">
-    <h3>関連ファイル</h3><hr>
-    <%= f.label t('.thumbnail'), :class => 'control-label' %>
-    <%= f.file_field :thumbnailm, :onchange=>{:disabled => true}%></br>
+	<ol class="breadcrumb">
+	  <li>STEP1: 仮登録</li>
+	  <li>STEP2: 商品説明</li>
+	  <li class="active">STEP3: ファイルのアップロード</li>
+	</ol>
+	<h3>関連ファイル</h3>
+	<p>＊アップロードにはかなり時間がかかります。気長にお待ち下さい。</p>
+	<hr>
+	<%= f.label 'サムネイルファイル', :class => 'control-label' %></br>
+    <%= f.file_field :thumbnail %></br></br>
 
-    <%= f.label "スクリーンショット（３枚まで）", :class => 'control-label' %>
-    <%= f.file_field :screenshots %></br>
-
-    <%= f.label t('.file'), :class => 'control-label' %>
-    <%= f.file_field :file %></br>
-
-    <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
-<% end %>
+    <%= f.submit "アップロード", :class => 'btn btn-primary' %></br></br>
 </div>
+<% end %>

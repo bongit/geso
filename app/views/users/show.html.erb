@@ -13,7 +13,7 @@
     </section></br>
   </div>
 
-  <div class="col-lg-9">
+  <div class="col-lg-10">
     <section> 
           <p><span class="label label-info"><%= t('.profile') %></span></p>
           <p><%= @user.profile_text %></p>
@@ -24,6 +24,13 @@
     </section>
   </div>
 </div>
+<div class="row">
+  <%= link_to t('.back'), users_path, :class => 'btn btn-default'  %>
+  <% if current_user?(@user) %>
+  <%= link_to t('.edit'), edit_user_path(@user), :class => 'btn btn-default' %>
+  <% end %>
+</div>
+
 <!-- 素材 -->
 <% if @user.game_assets.any? %>
   <div class="page-header">
@@ -48,12 +55,6 @@
     </div>
   </div>
 <% end %>
-
-  <%= link_to t('.back'), users_path, :class => 'btn btn-default'  %>
-
-  <% if current_user?(@user) %>
-    <%= link_to t('.edit'), edit_user_path(@user), :class => 'btn btn-default' %>
-  <% end %>
 
   <% if current_user.admin? && !current_user?(@user) %>
     <%= link_to t('.destroy'), user_path(@user),

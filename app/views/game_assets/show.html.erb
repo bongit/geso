@@ -1,10 +1,19 @@
-<div class="page-header">
-  <h1><%= @game_asset.name.titleize %></h1>
+<div class="row">
+	<div class="col-lg-4">
+		<%= image_tag "/assets/thumbs/thumbnail_#{@game_asset.id}.png", :width => '248', :height => '248' %>
+	</div>
+	<div class="col-lg-8">
+		<div class="page-header">
+			<h1><%= @game_asset.name.titleize %></h1>
+		</div>
+		<div data-no-turbolink>
+			<%= link_to "購入する", :action=>'download' %>
+		</div>
+	</div>
 </div>
 
 <div class="row">
   <div class="col-lg-4">
-  	<%= image_tag "thumbs/thumbnail_#{@game_asset.id}.png", :width => '300', :height => '300' %>
   </div>
   <div class="col-lg-8">
 	<h3>商品情報</h3><hr>
@@ -23,21 +32,33 @@
 	  </section>
 	  <% if @game_asset.reviews.any? %>
 	  <hr><h3>レビュー</h3>
-	  	<% @game_asset.reviews.each do |review| %>
       	<table class="table table-hover">
 	  		<thead>
 	  			<th>評価</th>
 	  			<th>コメント</th>
 	  			<th>レビュアー</th>
 	  		</thead>
+	  		<% @game_asset.reviews.each do |review| %>
 	  		<tbody>
 	  			<td><%= review.rating %></td>
 	  			<td><%= review.text %></td>
 	  			<td><%= User.find(review.reviewer_id).name %></td>
 	  		</tbody>
+	  		<% end %>
 	  	</table>
-	  	<% end %>
 	  <% end %>
-  	<%= link_to 'Download', :action => 'download' %>
+  	<%= form_tag("thumbnail_check", :multipart => true) do %>
+  		<%= label_tag "サムネイル" %>
+	  	<%= file_field_tag :thumb %>
+	  	<%= hidden_field_tag :id, @game_asset.id %>
+	  	<%= submit_tag 'アップロード'%>
+  	<% end %>
+  	<%= form_tag("screenshot_check", :multiple => true, :multipart => true) do %>
+  		<%= label_tag "スクリーンショット" %>
+	  	<%= file_field_tag :sss %>
+	  	<%= hidden_field_tag :id, @game_asset.id %>
+	  	<%= submit_tag 'アップロード'%>
+  	<% end %>
+	</div>
 </div>
 

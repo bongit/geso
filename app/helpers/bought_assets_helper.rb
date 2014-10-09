@@ -1,0 +1,2 @@
+module BoughtAssetsHelper
+end

@@ -1,0 +1,7 @@
+$(function () {
+   $(document).on('ajax:success', '.ajax-link', function (ujs, content, status, xhr) {
+    $('#status').html(
+    	"<%= escape_javascript(render :partial => 'uploading_status') %>"
+    	);
+  });
+});

@@ -1,0 +1,8 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+<% 1.upto(100) do |n| %>
+bought_asset<%= n %>:
+ id: <%= n %>
+ user_id: 1
+ game_asset_id: <%= 100-n %>
+<% end %>

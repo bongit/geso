@@ -1,6 +1,6 @@
 # coding: utf-8
 class GameAssetsController < ApplicationController
-  before_action :set_game_asset, only: [:show, :edit, :update, :destroy, :download]
+  before_action :set_game_asset, only: [:show, :edit, :update, :destroy]
   before_action :singed_in_asset
 
   # GET /game_assets
@@ -36,13 +36,6 @@ class GameAssetsController < ApplicationController
   def edit
   end
 
-  def edit2
-    @game_asset = GameAsset.find(params[:id])
-  end
-
-  def edit3
-    @game_asset = GameAsset.find(params[:id])
-  end
 
   # POST /game_assets
   # POST /game_assets.json
@@ -52,10 +45,10 @@ class GameAssetsController < ApplicationController
 
       respond_to do |format|
         if @game_asset.save
-          format.html { redirect_to "/game_assets/#{@game_asset.id}/edit2", notice: '素材の仮登録が完了しました。引き続き情報を入力して下さい。' }
+          format.html { redirect_to "/game_assets/#{@game_asset.id}/edit", notice: '素材の仮登録が完了しました。引き続き情報を入力して下さい。' }
           format.json { render :show, status: :created, location: @game_asset }
         else
-          format.html { render :edit2, notice: '値が正しくありません。'}
+          format.html { render :edit, notice: '値が正しくありません。'}
           format.json { render json: @game_asset.errors, status: :unprocessable_entity }
         end
       end
@@ -75,32 +68,6 @@ class GameAssetsController < ApplicationController
     end
   end
 
-  def step2
-    @game_asset = GameAsset.find(params[:id])
-    respond_to do |format|
-      if @game_asset.update(game_asset_params)
-        format.html { redirect_to "/game_assets/#{@game_asset.id}/edit3", notice: '商品情報の登録が完了しました。素材ファイルをアップロードして下さい。' }
-        format.json { render :edit3, status: :ok, location: @game_asset }
-      else
-        format.html { render :edit3, notice: '値が正しくありません。'}
-        format.json { render json: @game_asset.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def step3
-    @game_asset = GameAsset.find(params[:id])
-    respond_to do |format|
-      if @game_asset.save(game_asset_params)
-        format.html { redirect_to "/game_assets/#{@game_asset.id}/edit3", notice: '商品情報の登録が完了しました。素材ファイルをアップロードして下さい。' }
-        format.json { render :show, status: :ok, location: @game_asset }
-      else
-        format.html { render :show, notice: '値が正しくありません。'}
-        format.json { render json: @game_asset.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # DELETE /game_assets/1
   # DELETE /game_assets/1.json
   def destroy
@@ -114,6 +81,45 @@ class GameAssetsController < ApplicationController
       format.html { redirect_to game_assets_url, notice: 'Game asset was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def thumbnail_check
+    @game_asset = GameAsset.find(params[:id])
+    thumb = params[:thumb]
+    name = thumb.original_filename
+    File.open("tmp/check/#{name}", 'wb') do |f|
+      f.write(thumb.read)
+    end
+    %x(clamscan "tmp/check/#{name}")
+
+    if $? == 0
+      %x(cp "tmp/check/#{name}" "public/assets/thumbs/thumbnail_#{params[:id]}.png")
+      redirect_to @game_asset, notice: 'サムネイル画像のアップロードが完了しました。'
+    else
+      redirect_to @game_asset, notice: 'サムネイル画像のアップロードに失敗しました。'
+    end
+    %x(rm -rf "tmp/check/#{name}")
+  end
+
+  def screenshots_check
+    @game_asset = GameAsset.find(params[:id])
+    sss = params[:sss]
+    name = thumb.original_filename
+
+    
+    File.open("tmp/check/#{name}", 'wb') do |f|
+      f.write(thumb.read)
+    end
+    %x(clamscan "tmp/check/#{name}")
+
+    if $? == 0
+      %x(cp "tmp/check/#{name}" "public/assets/thumbs/thumbnail_#{params[:id]}.png")
+      redirect_to @game_asset, notice: 'サムネイル画像のアップロードが完了しました。'
+    else
+      redirect_to @game_asset, notice: 'サムネイル画像のアップロードに失敗しました。'
+    end
+    %x(rm -rf "tmp/check/#{name}")
+
   end
 
   def upload
@@ -153,6 +159,7 @@ class GameAssetsController < ApplicationController
   end
 
   def download
+    @game_asset = GameAsset.find(params[:id])
     bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
     dir_file = Rails.application.secrets.aws_s3_dir_name + @game_asset.file_name
 
@@ -162,22 +169,21 @@ class GameAssetsController < ApplicationController
       })
 
     @game_asset.increment_dt
+
+    bought_asset = BoughtAsset.new
+    bought_asset.user_id = current_user.id
+    bought_asset.game_asset_id = @game_asset.id
+    bought_asset.save
   end
 
-  def test
-  end
+  def review_new
+    set_game_asset
+    @review = Review.new
+    @review.reviewer_id = current_user.id
+    @review.game_asset_id = params[:id]
+  end 
 
-  def thumbnail
-    thumb_file = params[:file]
-    thumb_name = thumb_file.original_filename
-    @thumb_path = "tmp/#{thumb_name}"
-
-    File.open(@thumb_path, 'wb') do |f|
-      f.write(thumb_file.read)
-    end
-
-    # @thumb = 'gesomaru.png'
-    redirect_to '/game_assets/test2'
+  def review_create
   end
 
   private
