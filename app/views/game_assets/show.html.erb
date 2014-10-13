@@ -1,4 +1,4 @@
-<div class="row">
+<div class="container-fluid">
 	<div class="col-lg-4">
 		<%= image_tag "/assets/thumbs/thumbnail_#{@game_asset.id}.png", :width => '248', :height => '248' %>
 	</div>
@@ -7,12 +7,12 @@
 			<h1><%= @game_asset.name.titleize %></h1>
 		</div>
 		<div data-no-turbolink>
-			<%= link_to "購入する", :action=>'download' %>
+			<div class="btn btn-default"><%= link_to "カートに追加する", :action=> 'add_to_cart' %></div>
 		</div>
 	</div>
 </div>
 
-<div class="row">
+<div class="container-fluid">
   <div class="col-lg-4">
   </div>
   <div class="col-lg-8">
@@ -59,6 +59,13 @@
 	  	<%= hidden_field_tag :id, @game_asset.id %>
 	  	<%= submit_tag 'アップロード'%>
   	<% end %>
+  	  	<%= form_tag("upload", :multipart => true) do %>
+  		<%= label_tag "素材ファイル" %>
+	  	<%= file_field_tag :file %>
+	  	<%= hidden_field_tag :id, @game_asset.id %>
+	  	<%= submit_tag 'アップロード'%>
+  	<% end %>
+
 	</div>
 </div>
 

@@ -1,0 +1,52 @@
+<div class="col-lg-12">
+	<div class="page-header">
+	  <h1>カート</h1>
+	</div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>サムネイル</th>
+        <th>商品名</br>作者名</th>
+        <th>商品説明</th>
+        <th>ダウンロード数</br>価格</br>評価</th>
+        <th>削除</td>
+      </tr>
+    </thead>
+    <tbody>
+    	<% sum = 0 %>
+    	<% buying_asset_ids = Array.new %>
+		<% @in_cart_item_ids.each do |i| %>
+			<% asset = @all_assets.find(i.asset_id) %>
+			<% buying_asset_ids.push(asset) %>
+		<tr>
+			<td>
+				<%= image_tag "/assets/thumbs/thumbnail_#{asset.id}.png", :width => '100', :height => '100' %>
+			</td>
+			<td>
+				<%= link_to asset.name, "/game_assets/#{i.asset_id}" %></br>
+				<%= link_to User.find(asset.user_id).name, "#" %>
+			</td>
+			<td>
+				<p><%= asset.sales_copy %></p>
+			</td>
+			<td>
+				<%= asset.downloaded_times %>回</br>
+				<%= asset.price %>円<% sum += asset.price %></br>
+				<%= asset.rating %>
+			</td>
+			<td><%= form_tag('cart_delete') do %>
+					<%= hidden_field_tag :cart_item_id, i.id %>
+					<%= submit_tag "カートから削除", :class => "btn btn-warning" %>
+				<% end %>
+			</td>
+		</tr>
+		<% end %>
+    </tbody>
+</table>
+<div class="pull-right">
+	<p>合計金額：<%= sum %>円</p></br>
+	<div class="btn btn-danger">
+		<%= link_to '購入処理へ', :action => 'order', :buying_asset_ids => buying_asset_ids %>
+	</div>
+</div>
+</div>

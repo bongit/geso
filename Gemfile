@@ -9,6 +9,7 @@ gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'twitter-bootstrap-rails'
+gem 'paypal-sdk-adaptivepayments'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.5'

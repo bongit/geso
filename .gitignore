@@ -26,4 +26,5 @@ doc/
 
 /config/secrets.yml
 /config/database.yml
+/config/paypal.yml
 /public/assets/thumbs/

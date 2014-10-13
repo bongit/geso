@@ -6,7 +6,7 @@ class GameAsset < ActiveRecord::Base
 
 	# Validations
 	validates :user_id, presence: true
-	validates :price, numericality: {:only_integer => true, :greater_than_or_equal_to => 0}
+	validates :price, numericality: {:only_integer => true, :greater_than_or_equal_to => 0, :less_than => 100000}
 
 	attr_accessor :file, :screenshots, :thumbnail
 	

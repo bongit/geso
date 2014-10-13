@@ -4,13 +4,22 @@ Rails.application.routes.draw do
     member do
       get :download
       get :review_new
+      get :add_to_cart
     end
     collection do
       post :thumbnail_check
+      post :upload
     end
   end
   resources :users do
     member do
+      get :bought_assets
+      get :cart_index
+      post :cart_delete
+      get :order
+      get :order_complete
+      get :cancel
+      get :ipn_notify
       get :following, :followers
       get :edit_new_password
       patch :update_password
@@ -25,8 +34,7 @@ Rails.application.routes.draw do
   match '/signup',  to: 'users#new',            via: 'get'
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
-  get 'static_pages/mailer'
-  get '/bought_assets/index'
+  get '/static_pages/mailer'
   resources :reviews, only:[:create]
 
   # The priority is based upon order of creation: first created -> highest priority.

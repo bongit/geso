@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
 	# Relations
+	has_one :pay_key
 	has_many :bought_assets
 	has_many :game_assets, dependent: :destroy
 	has_many :relationships, foreign_key: "follower_id", dependent: :destroy

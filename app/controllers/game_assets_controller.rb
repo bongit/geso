@@ -46,10 +46,8 @@ class GameAssetsController < ApplicationController
       respond_to do |format|
         if @game_asset.save
           format.html { redirect_to "/game_assets/#{@game_asset.id}/edit", notice: '素材の仮登録が完了しました。引き続き情報を入力して下さい。' }
-          format.json { render :show, status: :created, location: @game_asset }
         else
           format.html { render :edit, notice: '値が正しくありません。'}
-          format.json { render json: @game_asset.errors, status: :unprocessable_entity }
         end
       end
   end
@@ -60,10 +58,8 @@ class GameAssetsController < ApplicationController
     respond_to do |format|
       if @game_asset.update(game_asset_params)
         format.html { redirect_to @game_asset, notice: '素材情報の更新が完了しました。' }
-        format.json { render :show, status: :ok, location: @game_asset }
       else
         format.html { render :edit }
-        format.json { render json: @game_asset.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -79,7 +75,6 @@ class GameAssetsController < ApplicationController
     @game_asset.destroy
     respond_to do |format|
       format.html { redirect_to game_assets_url, notice: 'Game asset was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 
@@ -101,7 +96,7 @@ class GameAssetsController < ApplicationController
     %x(rm -rf "tmp/check/#{name}")
   end
 
-  def screenshots_check
+  def screenshot_check
     @game_asset = GameAsset.find(params[:id])
     sss = params[:sss]
     name = thumb.original_filename
@@ -119,12 +114,12 @@ class GameAssetsController < ApplicationController
       redirect_to @game_asset, notice: 'サムネイル画像のアップロードに失敗しました。'
     end
     %x(rm -rf "tmp/check/#{name}")
-
   end
 
   def upload
     #File -> temp
-    file = game_asset_params[:file]
+    @game_asset = GameAsset.find(params[:id])
+    file = params[:file]
     name = file.original_filename
     File.open("tmp/check/#{name}", 'wb') do |f|
       file.read do |chunk|
@@ -146,10 +141,8 @@ class GameAssetsController < ApplicationController
       respond_to do |format|
         if @game_asset.save
           format.html { redirect_to @game_asset, notice: '素材の登録が完了しました。' }
-          format.json { render :show, status: :created, location: @game_asset }
         else
           format.html { render :new , notice: '値が正しくありません。'}
-          format.json { render json: @game_asset.errors, status: :unprocessable_entity }
         end
       end
     else
@@ -174,6 +167,17 @@ class GameAssetsController < ApplicationController
     bought_asset.user_id = current_user.id
     bought_asset.game_asset_id = @game_asset.id
     bought_asset.save
+  end
+
+  def add_to_cart
+    @cart = Cart.new
+    @cart.user_id = current_user.id
+    @cart.asset_id = params[:id]
+    if @cart.save
+      redirect_to "/users/#{current_user.id}/cart_index", notice: "カートに商品が追加されました。"
+    else
+      render :show , notice: "error"   
+    end
   end
 
   def review_new

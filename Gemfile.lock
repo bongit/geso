@@ -80,6 +80,11 @@ GEM
     mysql2 (0.3.16)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
+    paypal-sdk-adaptivepayments (1.117.0)
+      paypal-sdk-core (~> 0.3.0)
+    paypal-sdk-core (0.3.1)
+      multi_json (~> 1.0)
+      xml-simple
     polyglot (0.3.5)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -146,6 +151,7 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     will_paginate (3.0.7)
+    xml-simple (1.1.4)
 
 PLATFORMS
   ruby
@@ -162,6 +168,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   mysql2
+  paypal-sdk-adaptivepayments
   rails (= 4.1.5)
   rmagick
   sass-rails (~> 4.0.3)

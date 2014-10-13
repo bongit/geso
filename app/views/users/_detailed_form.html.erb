@@ -1,9 +1,9 @@
 <%= form_for @user, :html => { :class => "form-horizontal user" } do |f| %>
-  <div class="container">
+  <div class="container-fluid">
     <%= render 'shared/error_messages', object: f.object %>
   </div>
-  <div class="container">
-    <div class="col-lg-6">
+  <div class="container-fluid">
+    <div class="col-lg-8">
       <%= f.label t('.name'), :class => 'control-label' %>
       <%= f.text_field :name, :class => 'form-control' %>
       <%= error_span(@user[:name]) %>
