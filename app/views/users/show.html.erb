@@ -3,7 +3,7 @@
 <div class="page-header">
   <h1><%= @user.name.titleize %></h1>
 </div>
-<div class="row">
+<div class="container-fluid">
   <div class="col-lg-2">
     <section>
         <%= gravatar_for @user %>
@@ -24,7 +24,7 @@
     </section>
   </div>
 </div>
-<div class="row">
+<div class="container-fluid">
   <%= link_to t('.back'), users_path, :class => 'btn btn-default'  %>
   <% if current_user?(@user) %>
   <%= link_to t('.edit'), edit_user_path(@user), :class => 'btn btn-default' %>
@@ -36,23 +36,21 @@
   <div class="page-header">
     <h1><%= t('.asset_title') %><span class="badge badge-important"><%= @user.game_assets.count%></span><%= t('.num')%></h1>
   </div>
-  <div class="row">
-    <div class="container col-lg-12">
-      <table class="table table-hover">
-        <thead>
-          <th><%= t('.asset_name') %></th>
-          <th><%= t('.asset_pr') %></th>
-          <th><%= t('.asset_dl') %></th>
-        </thead>
-          <% @user.game_assets.each do |g| %>
-          <tbody>
-              <td><%= link_to g.name, game_asset_path(g) %></td>
-              <td><%= g.sales_copy %></td>
-              <td><%= g.downloaded_times %></td>
-          </tbody>
-          <% end %>
-      </table>
-    </div>
+  <div class="container-fluid">
+    <table class="table table-hover">
+      <thead>
+        <th><%= t('.asset_name') %></th>
+        <th><%= t('.asset_pr') %></th>
+        <th><%= t('.asset_dl') %></th>
+      </thead>
+        <% @user.game_assets.each do |g| %>
+        <tbody>
+            <td><%= link_to g.name, game_asset_path(g) %></td>
+            <td><%= g.sales_copy %></td>
+            <td><%= g.downloaded_times %></td>
+        </tbody>
+        <% end %>
+    </table>
   </div>
 <% end %>
 

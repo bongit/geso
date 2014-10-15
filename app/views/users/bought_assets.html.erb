@@ -1,8 +1,38 @@
-<h1>Users#BoughtAssets</h1>
-<% if @response != nil %>
-<%= @response.payKey %>
-<% end %>
-<% @bought_assets.each do |ba| %>
-<%= link_to GameAsset.find(ba.game_asset_id).name, "/game_assets/#{ba.game_asset_id}" %>
-<%= link_to 'レビューを書く', "/game_assets/#{ba.game_asset_id}/review_new" %></br>
-<% end %>
+<div class="page-header">
+  <h1>購入済み</h1>
+</div>
+<div class="container-fluid">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>サムネイル</th>
+        <th>商品名</br>作者名</th>
+        <th>商品説明</th>
+        <th>ダウンロード</th>
+        <th>レビュー</th>
+      </tr>
+    </thead>
+    <tbody>
+    	<% @assets.each do |asset| %>
+		<tr>
+			<td>
+				<%= image_tag "/assets/thumbs/thumbnail_#{asset.id}.png", :width => '100', :height => '100' %>
+			</td>
+			<td>
+				<%= link_to asset.name, "/game_assets/#{asset.id}" %></br>
+				<%= link_to User.find(asset.user_id).name, "#" %>
+			</td>
+			<td>
+				<p><%= asset.sales_copy %></p>
+			</td>
+			<td>
+				<div class="btn btn-default"><%= link_to "ダウンロード", :controller=>'game_assets', :action=>'download' %></div>
+			</td>
+			<td>
+				<%= link_to 'レビューを書く', "/game_assets/#{asset.id}/review_new" %></br>
+			</td>
+		</tr>
+		<% end %>
+    </tbody>
+</table>
+</div>

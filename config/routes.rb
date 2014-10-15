@@ -5,9 +5,10 @@ Rails.application.routes.draw do
       get :download
       get :review_new
       get :add_to_cart
+      post :thumbnail_check
+      post :screenshot_check
     end
     collection do
-      post :thumbnail_check
       post :upload
     end
   end

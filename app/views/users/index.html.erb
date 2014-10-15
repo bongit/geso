@@ -18,7 +18,9 @@
 <% end %>
 <hr>
 
-<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page') %>
+<div class="pagination col-lg-12">
+<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page'), renderer: BootstrapPagination::Rails %>
+</div>
 <table class="table table-striped">
   <thead>
     <tr>

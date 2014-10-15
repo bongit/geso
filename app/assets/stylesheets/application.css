@@ -13,3 +13,27 @@
  *= require_tree .
  *= require_self
  */
+
+body {
+	background-color: #F5F5F5;
+}
+
+footer {
+	background-color: #FDC44F;
+}
+
+.navbar {
+	background-color: #FDC44F;
+}
+
+.sidebar-nav {
+	background-color: #8DCF3F;
+}
+
+.jumbotron {
+	background-color: #F58E7E; 	 	
+}
+
+a:hover {
+	color: #F58E7E; 
+}

@@ -8,7 +8,7 @@ class GameAsset < ActiveRecord::Base
 	validates :user_id, presence: true
 	validates :price, numericality: {:only_integer => true, :greater_than_or_equal_to => 0, :less_than => 100000}
 
-	attr_accessor :file, :screenshots, :thumbnail
+	attr_accessor :file, :screenshots, :thumb
 	
 	# Methods
 	def self.search(search_word, main_category, sub_category) #self.でクラスメソッドとしている

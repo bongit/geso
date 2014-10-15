@@ -1,13 +1,13 @@
 <div class="jumbotron">
   	<h1><%= t('.title') %></br>
-  		<small class="text-primary"><%= t('.subtitle') %></small>
+  		<small><%= t('.subtitle') %></small>
   	</h1>
 	<%= image_tag('gesomaru.png')%>
 	<%= image_tag('takomi.png')%>
     <h2><%= t('.sentence0') %></h2></br>
-    	<p class="text-primary"><%= t('.sentence1') %></br>
-    	<p class="text-primary"><%= t('.sentence2') %></br>
-    	<p class="text-primary"><%= t('.sentence3') %></br></br>
+    	<p><%= t('.sentence1') %></br>
+    	<p><%= t('.sentence2') %></br>
+    	<p><%= t('.sentence3') %></br></br>
   	<% unless signed_in? %>
 		<span class='btn btn-default'><%= link_to t('.new_user'), new_user_path%></span>
 	<% end %>

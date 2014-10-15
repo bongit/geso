@@ -176,22 +176,23 @@ class UsersController < ApplicationController
     cart_items.each do |ci|
       pay_key_array.push(ci.pay_key)
     end
-    pay_key_array.uniq
-    if pay_key_array.length != 1
+    if pay_key_array.uniq.length != 1
       redirect_to root_path, notice: "エラーが発生しました"
+      return
     end
 
     @api = PayPal::SDK::AdaptivePayments::API.new
     @payment_details_request = @api.build_payment_details()
     @payment_details_request.payKey = pay_key_array.first
     @payment_details_response = @api.payment_details(@payment_details_request)
+
     @api.logger.info("PayKey : " + pay_key_array.first)
     @api.logger.info("ack : " + @payment_details_response.responseEnvelope.ack)
 
     # 購入済みに追加　➡　カートから削除
     if @payment_details_response.responseEnvelope.ack == "Success"
       @api.logger.info("Status : " + @payment_details_response.status)
-      if @payment_details_response.status == "COMPLETED"
+      if @payment_details_response.status == "COMPLETED" || @payment_details_response.status == "CREATED"
         in_cart_items = Cart.where(user_id: current_user.id)
         in_cart_items.each do |item|
           bought = BoughtAsset.new
@@ -222,7 +223,12 @@ class UsersController < ApplicationController
   end
 
   def bought_assets
-    @bought_assets = BoughtAsset.where(user_id: current_user.id)
+    bought_assets = BoughtAsset.where(user_id: current_user.id)
+    @assets = Array.new
+    bought_assets.each do |ba|
+      @assets.push(GameAsset.find(ba.game_asset_id))
+    end
+
   end
 
   private

@@ -35,7 +35,7 @@
 
 <!--一覧-->
 <div class='container-fluid'>
-<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page') %>
+<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page'), renderer: BootstrapPagination::Rails %>
   <table class="table table-hover">
     <thead>
       <tr>
