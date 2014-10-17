@@ -2,6 +2,7 @@
 class GameAssetsController < ApplicationController
   before_action :set_game_asset, only: [:show, :edit, :update, :destroy]
   before_action :singed_in_asset
+  before_action :correct_user, only: [:edit]
 
   # GET /game_assets
   # GET /game_assets.json
@@ -25,6 +26,7 @@ class GameAssetsController < ApplicationController
   def show
     @author = User.find(@game_asset[:user_id])
     @is_bought_asset = BoughtAsset.exists?(user_id: current_user.id, game_asset_id: params[:id])
+    @license = @game_asset.license
   end
 
   # GET /game_assets/new
@@ -32,6 +34,16 @@ class GameAssetsController < ApplicationController
     @game_asset = GameAsset.new
   end
 
+  def ajax_test
+  end
+
+  def ajax_post
+    @license = params[:license].to_i
+    logger.info("license :" + params[:license])
+    respond_to do |format|
+      format.js
+    end
+  end
 
   # GET /game_assets/1/edit
   def edit
@@ -44,13 +56,13 @@ class GameAssetsController < ApplicationController
     @game_asset = GameAsset.new(game_asset_params)
     @game_asset.user_id = current_user.id
 
-      respond_to do |format|
-        if @game_asset.save
-          format.html { redirect_to "/game_assets/#{@game_asset.id}/edit", notice: '素材の仮登録が完了しました。引き続き情報を入力して下さい。' }
-        else
-          format.html { render :edit, notice: '値が正しくありません。'}
-        end
+    respond_to do |format|
+      if @game_asset.save
+        format.html { redirect_to "/game_assets/#{@game_asset.id}/edit", notice: '素材の仮登録が完了しました。引き続き情報を入力して下さい。' }
+      else
+        format.html { render :edit, notice: '値が正しくありません。'}
       end
+    end
   end
 
   # PATCH/PUT /game_assets/1
@@ -160,8 +172,11 @@ class GameAssetsController < ApplicationController
 
   def download
     @game_asset = GameAsset.find(params[:id])
+    bought_assets = BoughtAsset.where(user_id: current_user)
+
+    if bought_assets.find_by(game_asset_id: @game_asset.id)
     bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
-    dir_file = Rails.application.secrets.aws_s3_dir_name + @game_asset.file_name
+    dir_file = Rails.application.secrets.aws_s3_dir_name + "geso_#{@game_asset.id}_#{@game_asset.name}"
 
     send_data(bucket.objects[dir_file].read, {
       filename: @game_asset.file_name,
@@ -174,6 +189,9 @@ class GameAssetsController < ApplicationController
     bought_asset.user_id = current_user.id
     bought_asset.game_asset_id = @game_asset.id
     bought_asset.save
+    else
+      redirect_to root_path, alert: "エラーが発生しました。"
+    end
   end
 
   def add_to_cart
@@ -206,12 +224,17 @@ class GameAssetsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def game_asset_params
       params.require(:game_asset).permit(:name, :price, :main_category, :sub_category, 
-        :sales_copy, :sales_body, :sales_closing, :file, :thumb, :screenshots, :order)
+        :sales_copy, :sales_body, :sales_closing, :file, :thumb, :screenshots, :order, :license, :make_public)
     end
 
     def singed_in_asset
       store_location
       redirect_to signin_url, notice: "ログインして下さい。" unless signed_in?
+    end
+
+    def correct_user
+      @author = User.find(@game_asset.user_id)
+      redirect_to(root_path) unless current_user?(@author)
     end
 
 

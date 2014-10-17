@@ -9,6 +9,7 @@
         <th>商品名</br>作者名</th>
         <th>商品説明</th>
         <th>ダウンロード数</br>価格</br>評価</th>
+        <th>ライセンス</th>
         <th>削除</td>
       </tr>
     </thead>
@@ -33,6 +34,9 @@
 				<%= asset.downloaded_times %>回</br>
 				<%= asset.price %>円<% sum += asset.price %></br>
 				<%= asset.rating %>
+			</td>
+			<td>
+				<%= render partial: "creative_commons", locals: {:license => asset.license} %>
 			</td>
 			<td><%= form_tag('cart_delete') do %>
 					<%= hidden_field_tag :cart_item_id, i.id %>

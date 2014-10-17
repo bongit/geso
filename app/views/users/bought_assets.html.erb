@@ -8,6 +8,7 @@
         <th>サムネイル</th>
         <th>商品名</br>作者名</th>
         <th>商品説明</th>
+        <th>ライセンス</th>
         <th>ダウンロード</th>
         <th>レビュー</th>
       </tr>
@@ -24,6 +25,9 @@
 			</td>
 			<td>
 				<p><%= asset.sales_copy %></p>
+			</td>
+			<td>
+				<%= render partial: "creative_commons", locals: {:license => asset.license} %>
 			</td>
 			<td>
 				<div class="btn btn-default"><%= link_to "ダウンロード", :controller=>'game_assets', :action=>'download' %></div>

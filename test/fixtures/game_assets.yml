@@ -16,6 +16,7 @@ game_asset<%= n %>:
   sub_category: 2
   make_public: 1
   rating: 5
+  license: 1
 <% end %>
 
 <% 30.upto(69) do |n| %>  
@@ -34,6 +35,7 @@ game_asset<%= n %>:
   sub_category: 1
   make_public: 1
   rating: 3
+  license: 3
 <% end %> 
 
 <% 70.upto(99) do |n| %>  
@@ -52,4 +54,5 @@ game_asset<%= n %>:
   sub_category: 3
   make_public: 1
   rating: 4
+  license: 6
 <% end %> 

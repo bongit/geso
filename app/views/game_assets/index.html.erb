@@ -56,7 +56,7 @@
       <% end %>
     </tbody>
   </table>
-<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page') %>
+<%= will_paginate :previous_label => t('.previous_page'), :next_label => t('.next_page'), renderer: BootstrapPagination::Rails %>
 </div>
 
 

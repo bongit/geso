@@ -13,19 +13,30 @@
     </div>
   <% end %>
 <!--入力エリア-->
-<div class="col-lg-9">
-    <h3>商品情報 概要</h3><hr>
-    <%= f.label "カテゴリ", :class => 'control-label' %></br>
-    <%= f.select :main_category, {"グラフィック"=>'Graphic', "コード"=>'Code', "サウンド"=>'Sound'}, :class => 'form-control' %></br></br>
+<div class="container-fluid">
+  <div class="col-lg-6">
+      <h3>商品情報 概要</h3><hr>
+      <%= f.label "カテゴリ", :class => 'control-label' %></br>
+      <%= f.select :main_category, {"グラフィック"=>'Graphic', "コード"=>'Code', "サウンド"=>'Sound'}, :class => 'form-control' %></br></br>
 
-    <%= f.label t('.name'), :class => 'control-label' %>
-    <%= f.text_field :name, :class => 'form-control' %></br>
+      <%= f.label "ライセンス", :class => 'control-label' %></br>
+      <%= f.select :license, {"CC BY"=>1, "CC BY-SA"=>2, "CC BY-ND"=>3, "CC BY-NC"=>4, "CC BY-NC-SA"=>5, "CC BY-NC-ND"=>6}, :prompt => "ライセンスを選んで下さい" %></br></br>
 
-    <%= f.label t('.price'), :class => 'control-label' %></br>
-    <%= f.number_field :price %><%= t('.yen') %></br></br>
+      <%= f.label "商品名", :class => 'control-label' %>
+      <%= f.text_field :name, :class => 'form-control' %></br>
 
-    <%= f.hidden_field :make_public, :value => 0 %>
+      <%= f.label "価格", :class => 'control-label' %></br>
+      <%= f.number_field :price, :class => 'form-control' %></br></br>
 
-    <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
-<% end %>
+      <%= f.hidden_field :make_public, :value => 0 %>
+
+      <%= f.submit "仮登録", :class => 'btn btn-primary'%></br></br>
+  <% end %>
+  </div>
+  <div class="col-lg-6 well">
+  <h3>ライセンス詳細</h3>
+  <% for i in 1..6 %>
+  <%= render :partial => "creative_commons", :locals => { :license => i } %>
+  <% end %>
+</div>
 </div>

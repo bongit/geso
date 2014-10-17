@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     end
     collection do
       post :upload
+      get :ajax_test
+      get :ajax_post
+      post :ajax_post
     end
   end
   resources :users do

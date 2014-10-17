@@ -37,3 +37,9 @@ footer {
 a:hover {
 	color: #F58E7E; 
 }
+
+a[rel~="license"] {
+	color: #F58E7E;
+}
+
+

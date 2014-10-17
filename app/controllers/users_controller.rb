@@ -176,8 +176,8 @@ class UsersController < ApplicationController
     cart_items.each do |ci|
       pay_key_array.push(ci.pay_key)
     end
-    if pay_key_array.uniq.length != 1
-      redirect_to root_path, notice: "エラーが発生しました"
+    if pay_key_array.uniq.length != 1 || pay_key_array.first == nil
+      redirect_to root_path, alert: "エラーが発生しました"
       return
     end
 
