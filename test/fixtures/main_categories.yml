@@ -2,10 +2,10 @@
 
 1:
   id: 1
-  name: Graphic
+  name: "グラフィック"
 2:
   id: 2
-  name: Code
+  name: "プログラム"
 3:
   id: 3
-  name: Sound
+  name: "サウンド・ミュージック"

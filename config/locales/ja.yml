@@ -24,7 +24,14 @@ ja:
               too_short: '短か過ぎます。'
             password_confirmation:
               confirmation: 'パスワードが一致しません'
-
+        game_asset:
+          blank: '空白です。' # モデル内で使いまわすエラーはこの階層に書く。
+          invalid: '正しい形式ではありません'
+          attributes:
+            name:
+              taken: '既に存在する名前です。'
+            main_category: 'カテゴリ'
+            sub_category: 'タイプ'
   static_pages:
     top:
       title: "ゲームを作りたいけど、1人では無理と諦めていた君に。"

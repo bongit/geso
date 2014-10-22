@@ -2,9 +2,10 @@ class UsersController < ApplicationController
   require 'paypal-sdk-adaptivepayments'
   PayPal::SDK.load('config/paypal.yml',  ENV['RACK_ENV'] || 'development')
 
-  before_action :signed_in_user, only: [:index, :edit, :update, :destroy, :following, :followers]
-  before_action :correct_user,   only: [:edit, :update, :cart_index]
+  before_action :signed_in_user, except: [:new, :forgot_password, :send_password_reset, :edit_new_password, :update_password]
+  before_action :correct_user,   only: [:edit, :update, :cart_index, :cart_delete, :cart_delete_all, :order]
   before_action :admin_user,     only: :destroy
+  before_action :set_user, only: [:show, :edit_new_password, :update_password]
 
   # GET /users
   # GET /users.json
@@ -15,7 +16,6 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @user = User.find(params[:id])
     @game_assets = @user.game_assets
   end
 
@@ -32,7 +32,6 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
         format.html { redirect_to '/signin', notice: 'ユーザー登録が完了しました。' }
@@ -82,24 +81,45 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
 
+
   # Password
-  # GET /users/forgot_password
-  def send_password_reset
-    @address = params[:address]
-    SystemMailer.password_reset(@address).deliver
-    redirect_to root_path, notice: "確認用メールをお送りしました。"
+  def forgot_password
   end
 
-  # GET /users/1/new_password
+  def send_password_reset
+    if User.find_by(email: params[:address])
+      user = User.find_by(email: params[:address])
+      one_time_token = User.new_remember_token
+      cookies[:one_time_token] = { value: one_time_token, expires: 10.minute.from_now }
+      user.update_attribute(:one_time_token, one_time_token)
+
+      SystemMailer.password_reset(params[:address]).deliver
+      redirect_to root_path, notice: "確認用メールをお送りしました。メールに記載の方法でパスワードを変更して下さい。"
+    else
+      redirect_to :back, alert: "このメールアドレスは登録されていません。"
+    end
+  end
+
   def edit_new_password
-    @user = User.find(params[:id])
+    user = User.find(params[:id])
+    if user.one_time_token != cookies[:one_time_token]
+      cookies.each do |cookie|
+        cookie.each do |c|
+          logger.info(c)
+        end
+      end
+      redirect_to root_path
+    else
+
+    end
   end
 
   # PATCH /users/1/update_password
   def update_password
-    @user = User.find(params[:id])
     respond_to do |format|
       if @user.update(user_params)
+        @user.update_attribute(:one_time_token, nil)
+        cookies.delete :one_time_token
         format.html { redirect_to '/signin', notice: 'パスワードを変更しました。' }
       else
         format.html { render :edit_new_password }
@@ -120,19 +140,34 @@ class UsersController < ApplicationController
     end 
   end
 
+  def cart_delete_all
+    in_cart_items = Cart.where(user_id: current_user.id)
+    in_cart_items.each do |ic|
+      Cart.destroy(ic)
+    end
+    redirect_to "/users/#{current_user.id}/cart_index", notice: "商品をカートから削除しました。"
+  end
+
   def order
-    @receivers = Array.new
+    in_cart_items = Cart.where(user_id: current_user.id)
+    assets = Array.new
+    in_cart_items.each do |ic|
+      assets.push(GameAsset.find(ic.asset_id))
+    end
+
+    receivers = Array.new
     geso_amount = 0
-    assets = GameAsset.where(id: params[:buying_asset_ids])
-    assets.each do |ba|
-      author = User.find(ba.user_id)
-      @receivers.push({
-        :amount => (ba.price*0.75).round.to_i,
+    assets.each do |a|
+      next if a.price == 0
+      author = User.find(a.user_id)
+      receivers.push({
+        :amount => (a.price*0.75).round.to_i,
         :email => author.email
         })
-      geso_amount += (ba.price*0.25).round.to_i
+      geso_amount += (a.price*0.25).round.to_i
     end
-    @receivers.push({
+
+    receivers.push({
       :amount => geso_amount,
       :email => "celendipity-facilitator@gmail.com"
       })
@@ -142,24 +177,24 @@ class UsersController < ApplicationController
       # Build request object
       @pay = @api.build_pay({
         :actionType => "PAY",
-        :cancelUrl => "http://localhost:3000/users/#{current_user.id}/cart_index",
-        :currencyCode => "JPY",
-        :feesPayer => "EACHRECEIVER",
         :receiverList => {
-          :receiver => @receivers
+          :receiver => receivers
         },
-        :ipnNotificationUrl => "http://localhost:3000/users/#{current_user.id}/ipn_notify",
-        :returnUrl => "http://localhost:3000/users/#{current_user.id}/order_complete" })
+        :currencyCode => "JPY",
+        :cancelUrl => "http://localhost:3000/users/#{current_user.id}/cart_index",
+        :returnUrl => "http://localhost:3000/users/#{current_user.id}/order_complete",
+        :requestEnvelope => { :errorLanguage => "en_US" },
+        :feesPayer => "EACHRECEIVER",})
 
       # Make API call & get response
       @response = @api.pay(@pay)
+      logger.info("responseEnvelope.ack : " + @response.responseEnvelope.ack)
 
       # Access response
       if @response.success? && @response.payment_exec_status != "ERROR"
         @api.logger.info("Pay Key : " + @response.payKey + " : "+ @response.paymentExecStatus)
-        cart_items = Cart.where(asset_id: params[:buying_asset_ids])
 
-        cart_items.each do |ci|
+        in_cart_items.each do |ci|
           ci.pay_key = @response.payKey
           ci.save
         end
@@ -170,15 +205,16 @@ class UsersController < ApplicationController
   end
 
   def order_complete
-    cart_items = Cart.where(user_id: current_user.id)
+    in_cart_items = Cart.where(user_id: current_user.id)
     pay_key_array = Array.new
 
-    cart_items.each do |ci|
+    in_cart_items.each do |ci|
       pay_key_array.push(ci.pay_key)
     end
+
     if pay_key_array.uniq.length != 1 || pay_key_array.first == nil
-      redirect_to root_path, alert: "エラーが発生しました"
-      return
+      flash[:alert] = "エラーが発生しました。"
+      redirect_to root_path and return
     end
 
     @api = PayPal::SDK::AdaptivePayments::API.new
@@ -192,26 +228,36 @@ class UsersController < ApplicationController
     # 購入済みに追加　➡　カートから削除
     if @payment_details_response.responseEnvelope.ack == "Success"
       @api.logger.info("Status : " + @payment_details_response.status)
-      if @payment_details_response.status == "COMPLETED" || @payment_details_response.status == "CREATED"
-        in_cart_items = Cart.where(user_id: current_user.id)
-        in_cart_items.each do |item|
-          bought = BoughtAsset.new
-          bought.user_id = current_user.id
-          bought.game_asset_id = item.asset_id
-          bought.save
-          item.destroy
-        end
-      end
-    end
-    redirect_to "/users/#{current_user.id}/bought_assets"
-  end
 
-  def ipn_notify
-    if PayPal::SDK::Core::API::IPN.valid?(request.raw_post)
-      render notice: "IPN message: VERIFIED"
+      if @payment_details_response.status == "COMPLETED"
+        in_cart_items.each do |ic|
+          bought_asset = BoughtAsset.new
+          bought_asset.user_id = current_user.id
+          bought_asset.game_asset_id = ic.asset_id
+          bought_asset.pay_key = pay_key_array.first
+            if bought_asset.save
+              game_asset = GameAsset.find(bought_asset.game_asset_id)
+              game_asset.increment_dt
+              ic.destroy
+            else
+              logger.info("Critical Error !")        
+              logger.info("user : " + current_user.id)            
+              logger.info("pay key : " + pay_key_array.first)
+              flash[:alert] = "重大なエラーが発生しました。運営者へ連絡して下さい。"       
+              redirect_to root_path and return
+            end
+        end
+      else
+        flash[:alert] = "支払エラーが発生しました。"       
+        redirect_to root_path and return
+      end
+
     else
-      render notice: "IPN message: INVALID"
+      flash[:alert] = "通信エラーが発生しました。"       
+      redirect_to root_path and return
     end
+
+    redirect_to "/users/#{current_user.id}/bought_assets", notice: "素材の購入が完了しました。"
   end
 
   def cancel
@@ -228,7 +274,6 @@ class UsersController < ApplicationController
     bought_assets.each do |ba|
       @assets.push(GameAsset.find(ba.game_asset_id))
     end
-
   end
 
   private
@@ -239,12 +284,11 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :profile_text, :url, :pay_key)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :profile_text, :url)
     end
 
     # Before actions
     def signed_in_user
-      store_location
       redirect_to signin_url, notice: "ログインして下さい。" unless signed_in?
     end
 

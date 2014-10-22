@@ -42,12 +42,18 @@
         <th><%= t('.asset_name') %></th>
         <th><%= t('.asset_pr') %></th>
         <th><%= t('.asset_dl') %></th>
+        <% if @user == current_user %>
+        <th>素材情報の編集</th>
+        <% end %>
       </thead>
         <% @user.game_assets.each do |g| %>
         <tbody>
             <td><%= link_to g.name, game_asset_path(g) %></td>
             <td><%= g.sales_copy %></td>
             <td><%= g.downloaded_times %></td>
+            <% if @user == current_user %>
+            <td><%= link_to "編集する", "/game_assets/#{g.id}/edit", :class => 'btn btn-default' %></td>
+            <% end %>            
         </tbody>
         <% end %>
     </table>

@@ -1,4 +1,3 @@
-<%= form_for(@game_asset) do |f| %>
 <!--エラーメッセージ-->
   <% if @game_asset.errors.any? %>
     <div id="error_explanation">
@@ -12,38 +11,84 @@
       </ul>
     </div>
   <% end %>
-<!--入力エリア-->
-<div class="col-lg-9">
-    <h3>商品情報 概要</h3><hr>
-    <%= f.label "カテゴリ", :class => 'control-label' %></br>
-    <%= f.select :main_category, {"グラフィック"=>'Graphic', "コード"=>'Code'}, :class => 'form-control' %></br></br>
 
-    <%= f.label "ライセンス", :class => 'control-label' %></br>
-    <%= f.select :license, {"CC BY"=>1, "CC BY-SA"=>2, "CC BY-ND"=>3, "CC BY-NC"=>4, "CC BY-NC-SA"=>5, "CC BY-NC-ND"=>6}, :prompt => "ライセンスを選んで下さい" %></br></br>
-
-    <%= f.label t('.name'), :class => 'control-label' %>
-    <%= f.text_field :name, :class => 'form-control' %></br>
-
-    <%= f.label t('.price'), :class => 'control-label' %></br>
-    <%= f.number_field :price %><%= t('.yen') %></br></br>
-
-    <%= f.label "タイプ" %>
-    <%= f.select :sub_category, {"背景"=>'background'} %></br></br>
-
-    <%= f.label t('.sales_copy'), :class => 'control-label' %>
-    <p><%= t('.sales_copy_sub') %></p>
-    <%= f.text_field :sales_copy, :class => 'form-control' %></br>
-
-    <%= f.label t('.sales_body'), :class => 'control-label' %>
-    <p><%= t('.sales_body_sub') %></p>
-    <%= f.text_area :sales_body, :class => 'form-control', rows:10 %></br>
-
-    <%= f.label t('.sales_closing'), :class => 'control-label' %>
-    <p><%= t('.sales_closing_sub') %></p>
-    <%= f.text_area :sales_closing, :class => 'form-control', rows:5 %></br>
-
-    <%= f.hidden_field :make_public, :value => 0 %>
-
-    <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
-<% end %>
+<div class="container-fluid">
+  <div class="col-lg-6">
+    <%= form_tag(thumbnail_check_game_asset_path(@game_asset), :multipart => true) do %>
+      <%= label_tag "サムネイル（.pngのみ 100kbまで）" %></br>
+        <%= file_field_tag :thumb, accept: 'image/png', :class => "form-control" %></br>
+        <%= hidden_field_tag :id, @game_asset.id %>
+        <%= submit_tag 'アップロード', :data => { :disable_with => "確認中……" }, :class => "btn btn-warning" %>
+      <% end %></br>
+  </div>
+    <div class="col-lg-6 well">
+    <%= image_tag "/assets/thumbs/thumbnail_#{@game_asset.id}.png", :width => '124', :height => '124', :alt => "サムネイル未登録" %>
+  </div>
 </div>
+<div class="container-fluid">
+  <div class="col-lg-12">
+    <%= form_tag("/game_assets/#{@game_asset.id}/screenshot_check", :multipart => true) do %>
+        <%= label_tag "スクリーンショット（.pngのみ 1枚辺り200kb/まで 3枚まで）" %></br>
+        <%= file_field_tag "screenshots[]", :multiple => true, accept: 'image/png', :class => "form-control"  %></br>
+        <%= hidden_field_tag :id, @game_asset.id %>
+        <%= submit_tag 'アップロード', :data => { :disable_with => "確認中……" }, :class => "btn btn-warning" %>
+      <% end %>
+  </div>
+</div>
+<%= render :partial => 'screenshots', :locals => { :asset => @game_asset } %>
+
+<%= form_for(@game_asset) do |f| %>
+<!--入力エリア-->
+<div class="container-fluid">
+  <div class="col-lg-12">
+      <%= f.label t('.name'), :class => 'control-label' %></br>
+      <h3><%= @game_asset.name %></h3></br>
+
+      <%= f.label "ライセンス", :class => 'control-label' %></br>
+      <%= render :partial => "creative_commons", :locals => { :license => @game_asset.license } %>
+
+      <%= f.label t('.price'), :class => 'control-label' %></br>
+      <%= f.number_field :price %><%= t('.yen') %></br></br>
+
+      <%= f.label "カテゴリ", :class => 'control-label' %></br>
+      <p><%= MainCategory.find(@game_asset.main_category).name %></p></br>
+
+      <%= f.label "タイプ", :class => 'control-label' %></br>
+      <%= f.select :sub_category, options_from_collection_for_select(SubCategory.where(parent_id: @game_asset.main_category), :id, :name), :class => "form-control"%></br></br>
+
+      <%= f.label "ホームページアドレス", :class => 'control-label' %>
+      <%= f.text_field :promo_url, :class => 'form-control' %></br>
+
+      <%= f.label t('.sales_copy'), :class => 'control-label' %>
+      <p><%= t('.sales_copy_sub') %></p>
+      <%= f.text_field :sales_copy, :class => 'form-control' %></br>
+
+      <%= f.label t('.sales_body'), :class => 'control-label' %>
+      <p><%= t('.sales_body_sub') %></p>
+      <%= f.text_area :sales_body, :class => 'form-control', rows:10 %></br>
+
+      <%= f.label t('.sales_closing'), :class => 'control-label' %>
+      <p><%= t('.sales_closing_sub') %></p>
+      <%= f.text_area :sales_closing, :class => 'form-control', rows:5 %></br>
+
+      <div class="well">
+      <%= f.label "公開", :class => 'control-label' %></br>
+      <%= f.check_box :make_public, {}, true, false %>
+      <%= f.label "素材を公開する", :class => 'control-label' %></br>
+      </div>
+
+      <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
+    <% end %>
+
+    <% if @game_asset.downloaded_times == 0 %>
+      <div class="container-fluid">
+        <div class="label">
+          素材の削除
+        </div></br>
+        <%= link_to '削除', game_asset_path(@game_asset), method: 'DELETE', :class => "btn btn-danger pull-right" %>
+      </div>
+<% end %>
+
+  </div>
+</div>
+

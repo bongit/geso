@@ -1,1 +1,4 @@
-<%= @response %>
+<% if @response != nil %>
+<% @response.error.each do |r| %>
+  <p class="responses"><%= r.message %></p>
+<% end %>

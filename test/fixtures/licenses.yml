@@ -1,0 +1,20 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+1:
+  id: 1
+  type: "CC BY"
+2:
+  id: 2
+  type: "CC BY-SA"
+3:
+  id: 3
+  type: "CC BY-ND"
+4:
+  id: 4
+  type: "CC BY-NC"
+5:
+  id: 5
+  type: "CC BY-NC-SA"
+6:
+  id: 6
+  type: "CC BY-NC-ND"

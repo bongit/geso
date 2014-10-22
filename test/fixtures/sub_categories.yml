@@ -1,26 +1,25 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 1:
   id: 1
-  name: Background
+  name: "背景素材"
   parent_id: 1
 2:
   id: 2
-  name: Sprite
+  name: "キャラクター素材"
   parent_id: 1
 3:
   id: 3
-  name: Snipet
+  name: "部分コード・ライブラリ等"
   parent_id: 2
 4:
   id: 4
-  name: App
+  name: "単体のゲーム・またはメインロジック（ゲームプレイが可能）"
   parent_id: 2
 5:
   id: 5
-  name: Sound
+  name: "サウンド素材・ジングル等（数秒程度）"
   parent_id: 3
 6:
   id: 6
-  name: Music
+  name: "BGM（目安30秒以上）"
   parent_id: 4

@@ -15,8 +15,9 @@ game_asset<%= n %>:
   main_category: 1
   sub_category: 2
   make_public: 1
-  rating: 5
   license: 1
+  file_uploaded: 0
+  rating: 0
 <% end %>
 
 <% 30.upto(69) do |n| %>  
@@ -34,11 +35,12 @@ game_asset<%= n %>:
   main_category: 1
   sub_category: 1
   make_public: 1
-  rating: 3
   license: 3
+  file_uploaded: 0
+  rating: 0
 <% end %> 
 
-<% 70.upto(99) do |n| %>  
+<% 70.upto(100) do |n| %>  
 game_asset<%= n %>: 
   id: <%= n %>
   user_id: <%= n %>  
@@ -53,6 +55,7 @@ game_asset<%= n %>:
   main_category: 2
   sub_category: 3
   make_public: 1
-  rating: 4
   license: 6
+  file_uploaded: 0
+  rating: 0
 <% end %> 

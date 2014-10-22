@@ -1,0 +1,12 @@
+<div class="col-lg-12">
+	<div class="page-header">
+	  <h1>素材のアップロード</h1></br>
+	</div>
+	<%= form_tag('zip', :multipart => true) do %>
+	<%= label :file, "素材ファイル（.zip形式のみ）"%>
+	<%= file_field_tag :file, accept: 'application/zip', :class => "form-control" %>
+	<%= submit_tag 'アップロード', :class => "btn btn-warning" %>
+	<% end %>
+</div>
+
+

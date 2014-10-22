@@ -1,26 +1,30 @@
 class ReviewsController < ApplicationController
-  def index
-    @user = current_user
-    @game_assets = Review.where('user_id' == @user.id)
-  end
-
-  def new
-  end
 
   def create
     @review = Review.new(review_params)
     @review.reviewer_id = current_user.id
     if @review.save
-      redirect_to '/bought_assets/index'
+      game_asset = GameAsset.find(@review.game_asset_id)
+      game_asset.rating = Review.average_rating(game_asset.id)
+      game_asset.save
+      redirect_to "/game_assets/#{@review.game_asset_id}", notice: "レビューを投稿しました。"
     else
-      render notice: '???'
+      flash[:alert] = @review.errors.full_messages
+      redirect_to :back
     end
   end
 
-  def edit
-  end
-
-  def update
+  def update    
+    @review = Review.find_by(id: params[:id], reviewer_id: current_user.id)
+    if @review.update(review_params)
+      game_asset = GameAsset.find(@review.game_asset_id)
+      game_asset.rating = Review.average_rating(game_asset.id)
+      game_asset.save
+      redirect_to "/game_assets/#{@review.game_asset_id}", notice: "レビューを変更しました。"
+    else
+      flash[:alert] = @review.errors.full_messages
+      redirect_to :back
+    end
   end
 
   def destroy
@@ -31,4 +35,5 @@ class ReviewsController < ApplicationController
     def review_params
       params.require(:review).permit(:game_asset_id, :text, :rating)
     end
+
 end

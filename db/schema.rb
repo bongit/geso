@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141015103224) do
+ActiveRecord::Schema.define(version: 20141022074809) do
 
   create_table "bought_assets", force: true do |t|
     t.integer  "user_id"
     t.integer  "game_asset_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "pay_key"
   end
 
   create_table "carts", force: true do |t|
@@ -41,20 +42,28 @@ ActiveRecord::Schema.define(version: 20141015103224) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "file_name"
-    t.integer  "price",            limit: 3, default: 0, null: false
+    t.integer  "price",            limit: 3,  default: 0, null: false
     t.string   "sales_copy"
     t.string   "sales_body"
     t.string   "sales_closing"
     t.string   "promo_url"
-    t.integer  "downloaded_times",           default: 0, null: false
-    t.integer  "rating"
+    t.integer  "downloaded_times",            default: 0, null: false
     t.integer  "main_category"
     t.integer  "sub_category"
     t.boolean  "make_public"
     t.integer  "license"
+    t.text     "zip_includes"
+    t.boolean  "file_uploaded"
+    t.float    "rating",           limit: 24
   end
 
   add_index "game_assets", ["name"], name: "index_game_assets_on_name", using: :btree
+
+  create_table "licenses", force: true do |t|
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "main_categories", force: true do |t|
     t.string   "name"
@@ -99,6 +108,7 @@ ActiveRecord::Schema.define(version: 20141015103224) do
     t.boolean  "admin",           default: false
     t.string   "profile_text"
     t.string   "url"
+    t.string   "one_time_token"
   end
 
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree

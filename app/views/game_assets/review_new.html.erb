@@ -1,6 +1,1 @@
-レビュー作成
-<%= form_for(@review) do |r| %>
-<%= r.text_field :text%>
-<%= r.hidden_field :game_asset_id, :value=>params[:id] %>
-<%= r.submit "完了" %>
-<% end %>
+<%= render partial: "review_form", :locals => { :command=> 'create' } %>

@@ -1,8 +1,5 @@
 <% if @response != nil %>
-<% @response.error.each do |r| %>
-  <p class="responses"><%= r.message %></p>
-<% end %>
-<%= @receivers.each do |rec| %>
-<%= print(rec["amount"]) %>円
-<% end %>
+	<% @response.error.each do |r| %>
+	  <p class="responses"><%= r.message %></p>
+	<% end %>
 <% end %>

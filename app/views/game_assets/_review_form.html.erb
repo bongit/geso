@@ -1,0 +1,43 @@
+<div class="container-fluid">
+<!--エラーメッセージ-->
+  <% if @review.errors.any? %>
+    <div id="error_explanation">
+      <div class="alert alert-error">
+        <%= pluralize(@review.errors.count,"") %><%= t('.error_sub')%>
+      </div>
+      <ul>
+      <% @review.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<!--入力エリア-->
+<%= form_for(@review, :controller => 'reviews', :action => command ) do |f| %>
+	<div class="container-fluid">
+		<div class="col-lg-6">
+			<div class="page-header">
+			  <h1>レビュー</br>
+			  	<small>for <%= @game_asset.name %></small></h1>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<%= image_tag "/assets/thumbs/thumbnail_#{@game_asset.id}.png", :width => '124', :height => '124' %>
+			<%= render partial: "creative_commons", locals: {:license => @game_asset.license} %>
+		</div>
+	</div>
+		<div class="container-fluid">
+			<div class="col-lg-9">
+			<%= f.label "評価（5段階）", :class => "control-label" %></br>
+			<%= f.number_field :rating, :class => "form-control" %></br></br>
+
+			<%= f.label "レビュー（400文字以内）", :class => "control-label" %></br>
+			<%= f.text_area :text, :class => "form-control", :rows => 10%></br></br>
+
+			<%= f.hidden_field :game_asset_id, :value=>params[:id] %>
+
+			<%= f.submit "完了", :class => "btn btn-warning pull-right" %>
+			<% end %>
+		</div>
+	</div>
+</div>

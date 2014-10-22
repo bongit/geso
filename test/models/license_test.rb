@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PayKeyTest < ActiveSupport::TestCase
+class LicenseTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

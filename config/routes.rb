@@ -4,15 +4,16 @@ Rails.application.routes.draw do
     member do
       get :download
       get :review_new
+      get :review_edit
       get :add_to_cart
+      get :get_free_asset
       post :thumbnail_check
       post :screenshot_check
-    end
-    collection do
+      get :asset_file_upload
+      post :zip
+      get :back_to_upload
+      get :asset_file_confirm
       post :upload
-      get :ajax_test
-      get :ajax_post
-      post :ajax_post
     end
   end
   resources :users do
@@ -20,10 +21,10 @@ Rails.application.routes.draw do
       get :bought_assets
       get :cart_index
       post :cart_delete
+      get :cart_delete_all
       get :order
       get :order_complete
       get :cancel
-      get :ipn_notify
       get :following, :followers
       get :edit_new_password
       patch :update_password
@@ -33,13 +34,13 @@ Rails.application.routes.draw do
       post :send_password_reset
     end
   end
+  resources :reviews, only:[:create, :update, :destroy]
   resources :relationships, only: [:create, :destroy]
   resources :sessions, only: [:new, :create, :destroy]
   match '/signup',  to: 'users#new',            via: 'get'
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
   get '/static_pages/mailer'
-  resources :reviews, only:[:create]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

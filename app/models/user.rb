@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
 	# Relations
 	has_one :pay_key
-	has_many :bought_assets
+	has_many :bought_assets, dependent: :destroy
+	has_many :carts, dependent: :destroy
 	has_many :game_assets, dependent: :destroy
 	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
 	has_many :followed_users, through: :relationships, source: :followed
@@ -15,16 +16,16 @@ class User < ActiveRecord::Base
 	before_save { self.email = email.downcase }
 
 	# Validations
-	validates :name, presence: true, length: { maximum: 50}, uniqueness: 
+	validates :name, presence: true, length: { maximum: 50 }, uniqueness: 
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 	validates :email, presence:   true,
-		format:     { with: VALID_EMAIL_REGEX},
-		uniqueness: { case_sensitive: false}
+		format:     { with: VALID_EMAIL_REGEX },
+		uniqueness: { case_sensitive: false }
 	has_secure_password
-	validates :password, length: { minimum: 6}
+	validates :password, length: { in: 6..20 }
 	validates :url, 
 		format: { with: /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix,allow_blank: true }
-	validates :profile_text, length: { maximum: 400}
+	validates :profile_text, length: { maximum: 400 }
 
 	def self.search(search_word) #self.でクラスメソッドとしている
     	if search_word

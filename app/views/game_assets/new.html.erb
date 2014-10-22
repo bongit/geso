@@ -1,5 +1,14 @@
-<div class="page-header">
-  <h1>素材の新規登録</h1></br>
+<div class="container-fluid">
+	<div class="col-lg-6">
+		<div class="page-header">
+		  <h1>素材の新規登録</h1></br>
+		</div>
+		<%= render 'form_minimal' %>
+	</div>
+	<div class="col-lg-6 well">
+		<h3>ライセンス詳細</h3>
+		<% for i in 1..6 %>
+		<%= render :partial => "creative_commons", :locals => { :license => i } %>
+		<% end %>
+	</div>
 </div>
-<%= render 'form_minimal' %>
-</br>
