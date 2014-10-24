@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   PayPal::SDK.load('config/paypal.yml',  ENV['RACK_ENV'] || 'development')
 
   before_action :signed_in_user, except: [:new, :forgot_password, :send_password_reset, :edit_new_password, :update_password]
-  before_action :correct_user,   only: [:edit, :update, :cart_index, :cart_delete, :cart_delete_all, :order]
+  before_action :correct_user,   only: [:edit, :update, :cart, :cart_delete, :cart_delete_all, :order]
   before_action :admin_user,     only: :destroy
   before_action :set_user, only: [:show, :edit_new_password, :update_password]
 
@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @game_assets = @user.game_assets
+    @game_assets = @user.game_assets.paginate(page: params[:page], :per_page => 10)
   end
 
   # GET /users/new
@@ -108,7 +108,7 @@ class UsersController < ApplicationController
           logger.info(c)
         end
       end
-      redirect_to root_path
+      redirect_to root_path, alert: "もう一度やり直して下さい。"
     else
 
     end
@@ -127,16 +127,14 @@ class UsersController < ApplicationController
     end
   end
 
-  def cart_index
+  def cart
     @in_cart_item_ids =  Cart.where(user_id: current_user.id)
     @all_assets = GameAsset.all
   end
 
   def cart_delete
     if Cart.destroy(params[:cart_item_id])
-      respond_to do |format|
-        format.html { redirect_to "/users/#{current_user.id}/cart_index", notice: "商品をカートから削除しました。"}
-      end       
+      redirect_to cart_user_path(current_user), :method => 'get', notice: "商品をカートから削除しました。"
     end 
   end
 
@@ -145,7 +143,7 @@ class UsersController < ApplicationController
     in_cart_items.each do |ic|
       Cart.destroy(ic)
     end
-    redirect_to "/users/#{current_user.id}/cart_index", notice: "商品をカートから削除しました。"
+    redirect_to cart_user_path, :method => 'get', notice: "商品をカートから削除しました。"
   end
 
   def order
@@ -257,7 +255,7 @@ class UsersController < ApplicationController
       redirect_to root_path and return
     end
 
-    redirect_to "/users/#{current_user.id}/bought_assets", notice: "素材の購入が完了しました。"
+    redirect_to bought_asset_user_path, notice: "素材の購入が完了しました。"
   end
 
   def cancel
@@ -272,8 +270,9 @@ class UsersController < ApplicationController
     bought_assets = BoughtAsset.where(user_id: current_user.id)
     @assets = Array.new
     bought_assets.each do |ba|
-      @assets.push(GameAsset.find(ba.game_asset_id))
+       @assets.push(GameAsset.find(ba.game_asset_id))
     end
+    @assets
   end
 
   private

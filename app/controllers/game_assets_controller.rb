@@ -47,7 +47,7 @@ class GameAssetsController < ApplicationController
 
     respond_to do |format|
       if @game_asset.save
-        format.html { redirect_to "/game_assets/#{@game_asset.id}/asset_file_upload", notice: '素材の仮登録が完了しました。引き続き素材ファイルをアップロードして下さい。' }
+        format.html { redirect_to asset_file_upload_game_asset_path, notice: '素材の仮登録が完了しました。引き続き素材ファイルをアップロードして下さい。' }
       else
         format.html { render :new }
       end
@@ -119,13 +119,17 @@ class GameAssetsController < ApplicationController
   def asset_file_upload
     if @game_asset.file_uploaded
       redirect_to @game_asset
+    elsif @game_asset.file_name
+      name = @game_asset.file_name
+      %x(rm -rf "tmp/check/#{name}")
+      @game_asset.update(file_name: nil)
     end
   end
 
   def zip
     file = form_tag_params[:file]
     if file != nil
-      if file.size < 500.megabytes
+      if file.size < 100.megabytes
         name = file.original_filename
         File.open("tmp/check/#{name}", 'wb') do |f|
           f.write(file.read)
@@ -143,7 +147,7 @@ class GameAssetsController < ApplicationController
           @game_asset.zip_includes = zip_names
           @game_asset.file_name = file.original_filename
             if @game_asset.save   
-              redirect_to "/game_assets/#{@game_asset.id}/asset_file_confirm", notice: "素材ファイルの解析が終了しました。このファイルで良いか確認して下さい。"
+              redirect_to asset_file_confirm_game_asset_path, notice: "素材ファイルの解析が終了しました。このファイルで良いか確認して下さい。"
             else
               %x(rm -rf "tmp/check/#{name}")
               redirect_to :back, alert: "ファイルの解析に失敗しました。もう一度やり直して下さい。"
@@ -160,17 +164,11 @@ class GameAssetsController < ApplicationController
     end
   end
 
-  def back_to_upload
-    name = @game_asset.file_name
-    if File.exist?(name)
-      %x(rm -rf "tmp/check/#{name}")
-    end
-    redirect_to "/game_assets/#{@game_asset.id}/asset_file_upload"
-  end
-
   def asset_file_confirm
     if @game_asset.file_uploaded
       redirect_to @game_asset
+    elsif !@game_asset.file_name
+      redirect_to asset_file_upload_game_asset_path
     end
   end
 
@@ -188,7 +186,7 @@ class GameAssetsController < ApplicationController
 
       redirect_to edit_game_asset_path, notice: '素材のアップロードが完了しました。残りの情報を入力して、素材を公開しましょう。'
     else
-      redirect_to "/game_assets/#{@game_asset.id}/asset_file_upload" , alert: "素材の登録に失敗しました。"
+      redirect_to asset_file_upload_game_asset_path , alert: "素材の登録に失敗しました。"
     end
     %x(rm -rf "tmp/check/#{name}")
   end
@@ -196,7 +194,7 @@ class GameAssetsController < ApplicationController
   def thumbnail_check
     thumb = form_tag_params[:thumb]
     if thumb != nil
-      if thumb.size < 100.kilobytes
+      if thumb.size < 500.kilobytes
         name = thumb.original_filename
         File.open("tmp/check/#{name}", 'wb') do |f|
           f.write(thumb.read)
@@ -211,7 +209,7 @@ class GameAssetsController < ApplicationController
         end
         %x(rm -rf "tmp/check/#{name}")
       else
-      redirect_to :back, alert: "ファイルが100kbを超えています。"
+      redirect_to :back, alert: "ファイルが制限サイズを超えています。"
       end        
     else
       redirect_to :back, alert: "ファイルが選択されていません。"
@@ -224,7 +222,7 @@ class GameAssetsController < ApplicationController
       count = 1
       screenshots.each do |ss|
         name = ss.original_filename
-        if ss.size < 200.kilobytes
+        if ss.size < 1.megabytes
           File.open("tmp/check/#{name}", 'wb') do |f|
             f.write(ss.read)
           end
@@ -239,7 +237,7 @@ class GameAssetsController < ApplicationController
           end
           %x(rm -rf "tmp/check/#{name}")
         else
-          redirect_to edit_game_asset_path, alert: "ファイル#{name}が200kbを超えています。" and return
+          redirect_to edit_game_asset_path, alert: "ファイル#{name}が制限サイズを超えています。" and return
         end
       end
         redirect_to edit_game_asset_path, notice: 'スクリーンショットのアップロードが完了しました。'
@@ -251,7 +249,7 @@ class GameAssetsController < ApplicationController
   def download
     bought_assets = BoughtAsset.where(user_id: current_user)
 
-    if bought_assets.find_by(game_asset_id: @game_asset.id) || @game_asset.price == 0
+    if bought_assets.find_by(game_asset_id: @game_asset.id)
     bucket = AWS::S3.new.buckets[Rails.application.secrets.aws_s3_bucket_name]
     dir_file = Rails.application.secrets.aws_s3_dir_name + "geso_#{@game_asset.id}_#{@game_asset.name}"
 
@@ -265,13 +263,17 @@ class GameAssetsController < ApplicationController
   end
 
   def add_to_cart
-    @cart = Cart.new
-    @cart.user_id = current_user.id
-    @cart.asset_id = @game_asset.id
-    if @cart.save
-      redirect_to "/users/#{current_user.id}/cart_index", notice: "カートに商品が追加されました。"
+    if @game_asset.user_id != current_user.id
+      @cart = Cart.new
+      @cart.user_id = current_user.id
+      @cart.asset_id = @game_asset.id
+      if @cart.save
+        redirect_to cart_user_path(@game_asset.user_id), notice: "カートに商品が追加されました。"
+      else
+        redirect_to :back , notice: "既にカートに入っています。"   
+      end
     else
-      redirect_to :back , notice: "既にカートに入っています。"   
+      redirect_to @game_asset
     end
   end
 
@@ -282,9 +284,9 @@ class GameAssetsController < ApplicationController
         bought_asset.game_asset_id = @game_asset.id
         if bought_asset.save
           @game_asset.increment_dt
-          redirect_to "/users/#{current_user.id}/bought_assets", notice: "無料素材を入手できます。"
+          redirect_to bought_assets_user_path, notice: "無料素材を入手できます。"
         else
-          redirect_to "/users/#{current_user.id}/bought_assets", notice: "既に入手済みです。"
+          redirect_to bought_assets_user_path, notice: "既に入手済みです。"
         end
       else
         redirect_to root_path, alert: "エラーが発生しました。"
@@ -292,10 +294,12 @@ class GameAssetsController < ApplicationController
   end
 
   def review_new
-    if BoughtAsset.find_by(user_id: current_user.id, game_asset_id: @game_asset.id)
+    if Review.find_by(reviewer_id: current_user.id, game_asset_id: @game_asset.id)
+      redirect_to review_edit_game_asset_path    
+    elsif BoughtAsset.find_by(user_id: current_user.id, game_asset_id: @game_asset.id)
       @review = Review.new
       @review.reviewer_id = current_user.id
-      @review.game_asset_id = @game_asset
+      @review.game_asset_id = @game_asset          
     else
       redirect_to root_path, alert: "エラーが発生しました。"
     end
@@ -306,7 +310,7 @@ class GameAssetsController < ApplicationController
       reviews = Review.where(game_asset_id: @game_asset.id)
       @review = reviews.find_by(reviewer_id: current_user.id)
     else
-      redirect_to "/game_assets/#{@game_asset.id}/review_new"
+      redirect_to reivew_new_game_asset_path
     end
   end
 
@@ -319,7 +323,7 @@ class GameAssetsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def game_asset_params
       params.require(:game_asset).permit(:name, :price, :main_category, :sub_category, :file_uploaded, :promo_url,
-        :sales_copy, :sales_body, :sales_closing, :make_public, :order, :license, :search)
+        :sales_copy, :sales_body, :sales_closing, :make_public, :order, :license, :search, :genre)
     end
 
     def form_tag_params

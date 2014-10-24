@@ -18,6 +18,7 @@ game_asset<%= n %>:
   license: 1
   file_uploaded: 0
   rating: 0
+  genre: 1
 <% end %>
 
 <% 30.upto(69) do |n| %>  
@@ -38,6 +39,7 @@ game_asset<%= n %>:
   license: 3
   file_uploaded: 0
   rating: 0
+  genre: 5
 <% end %> 
 
 <% 70.upto(100) do |n| %>  
@@ -58,4 +60,5 @@ game_asset<%= n %>:
   license: 6
   file_uploaded: 0
   rating: 0
+  genre: 8
 <% end %> 

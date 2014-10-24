@@ -14,7 +14,7 @@
 
 <div class="container-fluid">
   <div class="col-lg-6">
-    <%= form_tag(thumbnail_check_game_asset_path(@game_asset), :multipart => true) do %>
+    <%= form_tag(thumbnail_game_asset_path, :multipart => true) do %>
       <%= label_tag "サムネイル（.pngのみ 100kbまで）" %></br>
         <%= file_field_tag :thumb, accept: 'image/png', :class => "form-control" %></br>
         <%= hidden_field_tag :id, @game_asset.id %>
@@ -27,7 +27,7 @@
 </div>
 <div class="container-fluid">
   <div class="col-lg-12">
-    <%= form_tag("/game_assets/#{@game_asset.id}/screenshot_check", :multipart => true) do %>
+    <%= form_tag(screenshot_game_asset_path, :multipart => true) do %>
         <%= label_tag "スクリーンショット（.pngのみ 1枚辺り200kb/まで 3枚まで）" %></br>
         <%= file_field_tag "screenshots[]", :multiple => true, accept: 'image/png', :class => "form-control"  %></br>
         <%= hidden_field_tag :id, @game_asset.id %>
@@ -54,7 +54,10 @@
       <p><%= MainCategory.find(@game_asset.main_category).name %></p></br>
 
       <%= f.label "タイプ", :class => 'control-label' %></br>
-      <%= f.select :sub_category, options_from_collection_for_select(SubCategory.where(parent_id: @game_asset.main_category), :id, :name), :class => "form-control"%></br></br>
+      <%= f.select :sub_category, options_from_collection_for_select(SubCategory.where(parent_id: @game_asset.main_category), :id, :name), :prompt => "素材のタイプを選んで下さい", :class => "form-control"%></br></br>
+
+      <%= f.label "ゲームジャンル", :class => 'control-label' %></br>
+      <%= f.select :genre, options_from_collection_for_select(Genre.all, :id, :name), :prompt => "主に使用を想定しているゲームジャンルを選んで下さい。", :class => "form-control"%></br></br>
 
       <%= f.label "ホームページアドレス", :class => 'control-label' %>
       <%= f.text_field :promo_url, :class => 'form-control' %></br>
@@ -76,19 +79,16 @@
       <%= f.check_box :make_public, {}, true, false %>
       <%= f.label "素材を公開する", :class => 'control-label' %></br>
       </div>
-
-      <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br>
-    <% end %>
-
+    </div>
+  <div class="container-fluid">
+    <div class="col-lg-6">
+      <%= f.submit t('.submit'), :class => 'btn btn-primary'%></br></br><% end %>
+    </div>
     <% if @game_asset.downloaded_times == 0 %>
-      <div class="container-fluid">
-        <div class="label">
-          素材の削除
-        </div></br>
+    <div class="col-lg-6">
         <%= link_to '削除', game_asset_path(@game_asset), method: 'DELETE', :class => "btn btn-danger pull-right" %>
-      </div>
-<% end %>
-
+    </div>
+    <% end %>
   </div>
 </div>
 

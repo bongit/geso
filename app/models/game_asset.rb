@@ -34,7 +34,13 @@ class GameAsset < ActiveRecord::Base
 	validate :sub_category_scope
 		def sub_category_scope
 			errors.add(:sub_category, "カテゴリを選んで下さい") if 
-			(sub_category != nil && sub_category < 0) || (sub_category != nil && 4 < sub_category)
+			(sub_category != nil && sub_category < 0) || (sub_category != nil && 15 < sub_category)
+		end
+	validates :genre, numericality: { only_integer: true }, allow_nil: true
+	validate :genre_scope
+		def genre_scope
+			errors.add(:genre, "ゲームジャンルを選んで下さい") if 
+			(genre != nil && genre < 0) || (genre != nil && 11 < genre)
 		end
 
 	attr_accessor :file, :screenshots, :thumb

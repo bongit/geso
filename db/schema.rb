@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141022074809) do
+ActiveRecord::Schema.define(version: 20141024103627) do
 
   create_table "bought_assets", force: true do |t|
     t.integer  "user_id"
@@ -55,9 +55,16 @@ ActiveRecord::Schema.define(version: 20141022074809) do
     t.text     "zip_includes"
     t.boolean  "file_uploaded"
     t.float    "rating",           limit: 24
+    t.integer  "genre"
   end
 
   add_index "game_assets", ["name"], name: "index_game_assets_on_name", using: :btree
+
+  create_table "genres", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "licenses", force: true do |t|
     t.string   "type"

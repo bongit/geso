@@ -12,6 +12,6 @@ class SystemMailer < ActionMailer::Base
 
   def password_reset(address)
     @user = User.find_by(email: address)
-  	mail to: address
+  	mail to: address, :subject => "[ゲソ丸]パスワード再設定"
   end
 end

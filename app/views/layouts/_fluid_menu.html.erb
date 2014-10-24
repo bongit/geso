@@ -16,7 +16,7 @@
       <li><strong><%= link_to t('.user_list'), users_path %></strong></li><hr>
 
       <li><strong>マイアカウント</strong></li>
-        <li><%= link_to 'カート', "/users/#{current_user.id}/cart_index" %></li>
+        <li><%= link_to 'カート', cart_user_path(current_user) %></li>
         <li><%= link_to t('.new_asset'), new_game_asset_path %></li>
         <li><%= link_to t('.show_user'), current_user %></li>
         <li><%= link_to '購入履歴', "/users/#{current_user.id}/bought_assets" %> </li>

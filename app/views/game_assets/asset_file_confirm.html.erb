@@ -13,10 +13,10 @@
 		<% end %>
 	</div>
 	<div class="btn btn-default">
-		<%= link_to "戻る", 'back_to_upload' %>
+		<%= link_to "戻る", asset_file_upload_game_asset_path %>
 	</div>
 
-	<%= form_tag('upload') do |f| %>
+	<%= form_tag('asset_file_confirm') do |f| %>
     <%= hidden_field_tag :file_uploaded, :value => "true" %>
     <%= submit_tag "このファイルで登録", :class => 'btn btn-warning', :onclick => "return confirm('ファイルは後から変更できません。登録してよろしいですか？')" %>
     <% end %>

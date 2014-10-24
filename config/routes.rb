@@ -3,35 +3,34 @@ Rails.application.routes.draw do
   resources :game_assets do
     member do
       get :download
-      get :review_new
-      get :review_edit
       get :add_to_cart
       get :get_free_asset
-      post :thumbnail_check
-      post :screenshot_check
+      get :review_new
+      get :review_edit
+      match 'thumbnail', to: 'game_assets#thumbnail_check', via: 'post'
+      match 'screenshot', to: 'game_assets#screenshot_check', via: 'post'
       get :asset_file_upload
-      post :zip
-      get :back_to_upload
+      match 'asset_file_upload', to: 'game_assets#zip', via: 'post'
       get :asset_file_confirm
-      post :upload
+      match 'asset_file_confirm', to: 'game_assets#upload', via: 'post'
     end
   end
   resources :users do
     member do
       get :bought_assets
-      get :cart_index
-      post :cart_delete
-      get :cart_delete_all
-      get :order
+      get :cart
+      match 'cart', to: 'users#cart_delete', via: 'patch'
+      match 'cart', to: 'users#cart_delete_all', via: 'delete'
+      match 'cart', to: 'users#order', via: 'post'
       get :order_complete
       get :cancel
       get :following, :followers
       get :edit_new_password
-      patch :update_password
+      match 'edit_new_password', to: 'users#update_password', via: 'patch'
     end
     collection do
       get :forgot_password
-      post :send_password_reset
+      match 'forgot_password', to: 'users#send_password_reset', via: 'post'
     end
   end
   resources :reviews, only:[:create, :update, :destroy]
@@ -40,7 +39,6 @@ Rails.application.routes.draw do
   match '/signup',  to: 'users#new',            via: 'get'
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
-  get '/static_pages/mailer'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
