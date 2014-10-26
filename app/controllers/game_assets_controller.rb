@@ -47,7 +47,7 @@ class GameAssetsController < ApplicationController
 
     respond_to do |format|
       if @game_asset.save
-        format.html { redirect_to asset_file_upload_game_asset_path, notice: '素材の仮登録が完了しました。引き続き素材ファイルをアップロードして下さい。' }
+        format.html { redirect_to asset_file_upload_game_asset_path(@game_asset), notice: '素材の仮登録が完了しました。引き続き素材ファイルをアップロードして下さい。' }
       else
         format.html { render :new }
       end
@@ -268,7 +268,7 @@ class GameAssetsController < ApplicationController
       @cart.user_id = current_user.id
       @cart.asset_id = @game_asset.id
       if @cart.save
-        redirect_to cart_user_path(@game_asset.user_id), notice: "カートに商品が追加されました。"
+        redirect_to cart_user_path(current_user), notice: "カートに商品が追加されました。"
       else
         redirect_to :back , notice: "既にカートに入っています。"   
       end

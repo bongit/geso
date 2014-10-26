@@ -2,9 +2,9 @@ Rails.application.routes.draw do
   root 'static_pages#top'
   resources :game_assets do
     member do
-      get :download
-      get :add_to_cart
-      get :get_free_asset
+      match 'bought_asset', to: 'game_assets#download', via: 'post'
+      match 'cart', to: 'game_assets#add_to_cart', via: 'post'
+      match 'free_asset', to: 'game_assets#get_free_asset', via: 'post'
       get :review_new
       get :review_edit
       match 'thumbnail', to: 'game_assets#thumbnail_check', via: 'post'

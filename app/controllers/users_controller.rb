@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   require 'paypal-sdk-adaptivepayments'
   PayPal::SDK.load('config/paypal.yml',  ENV['RACK_ENV'] || 'development')
 
-  before_action :signed_in_user, except: [:new, :forgot_password, :send_password_reset, :edit_new_password, :update_password]
+  before_action :signed_in_user, except: [:new, :create, :forgot_password, :send_password_reset, :edit_new_password, :update_password]
   before_action :correct_user,   only: [:edit, :update, :cart, :cart_delete, :cart_delete_all, :order]
   before_action :admin_user,     only: :destroy
   before_action :set_user, only: [:show, :edit_new_password, :update_password]

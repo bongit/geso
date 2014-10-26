@@ -6,13 +6,19 @@
 		<div class="page-body"><p>
 			<% if @author != current_user %>
 				<% if @game_asset.price == 0 %>
-					<div class="btn btn-primary"><%= link_to "無料", :action=>'get_free_asset' %></div>
+						<%= form_tag(free_asset_game_asset_path) do %>
+						<%= submit_tag'無料', :class => "btn btn-primary" %>
+						<% end %>
 				<% else %>
 					<% if @is_bought_asset == true %>
 						<%= link_to "購入済み", bought_asset_user_path %>
-						<div class="btn btn-primary"><%= link_to "ダウンロード", :action => 'download' %></div>
+						<%= form_tag(bought_asset_game_asset_path) do %>
+						<%= submit_tag'ダウンロード', :class => "btn btn-primary" %>
+						<% end %>
 					<% else %>
-						<div class="btn btn-primary"><%= link_to "カートに追加する", :action=> 'add_to_cart' %></div>
+						<%= form_tag(cart_game_asset_path) do %>
+						<%= submit_tag'カートに追加する', :class => "btn btn-primary" %>
+						<% end %>
 					<% end %>
 				<% end %>
 			<% else %>

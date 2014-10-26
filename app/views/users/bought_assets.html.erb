@@ -19,7 +19,7 @@
 				<%= link_to image_tag("/assets/thumbs/thumbnail_#{asset.id}.png", :width => '100', :height => '100'), asset %>
 			</td>
 			<td>
-				<%= link_to asset.name, "/game_assets/#{asset.id}" %></br>
+				<%= link_to asset.name, asset %></br>
 				<%= link_to User.find(asset.user_id).name, "#" %>
 			</td>
 			<td>
@@ -31,7 +31,9 @@
 				<%= render partial: "creative_commons", locals: {:license => asset.license} %>
 			</td>
 			<td>
-				<%= link_to "ダウンロード", download_game_asset_path(asset), :id => asset.id, :class => "btn btn-primary" %></br>
+				<%= form_tag(bought_asset_game_asset_path(asset)) do %>
+				<%= submit_tag'ダウンロード', :class => "btn btn-primary" %>
+				<% end %>
 				<% if Review.find_by(reviewer_id: current_user.id, game_asset_id: asset.id) %>
 				<%= link_to 'レビューを変更する', review_edit_game_asset_path, :class => "btn btn-default" %></br>	
 				<% else %>

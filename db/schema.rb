@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141024103627) do
+ActiveRecord::Schema.define(version: 20141026071821) do
 
   create_table "bought_assets", force: true do |t|
     t.integer  "user_id"
@@ -27,13 +27,6 @@ ActiveRecord::Schema.define(version: 20141024103627) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "pay_key"
-  end
-
-  create_table "categories", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "type"
-    t.string   "name"
   end
 
   create_table "game_assets", force: true do |t|
@@ -70,6 +63,7 @@ ActiveRecord::Schema.define(version: 20141024103627) do
     t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
   end
 
   create_table "main_categories", force: true do |t|
