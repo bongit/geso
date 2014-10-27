@@ -179,7 +179,7 @@ class UsersController < ApplicationController
           :receiver => receivers
         },
         :currencyCode => "JPY",
-        :cancelUrl => "http://localhost:3000/users/#{current_user.id}/cart_index",
+        :cancelUrl => "http://localhost:3000/users/#{current_user.id}/cart",
         :returnUrl => "http://localhost:3000/users/#{current_user.id}/order_complete",
         :requestEnvelope => { :errorLanguage => "en_US" },
         :feesPayer => "EACHRECEIVER",})
