@@ -1,5 +1,5 @@
 class SystemMailer < ActionMailer::Base
-  default from: 'celendipity@gmail.com'
+  default from: 'appdente@gmail.com'
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
