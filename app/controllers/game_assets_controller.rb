@@ -134,7 +134,7 @@ class GameAssetsController < ApplicationController
         File.open("tmp/check/#{name}", 'wb') do |f|
           f.write(file.read)
         end
-        %x(clamscan "tmp/check/#{name}")
+        %x(clamdscan -c /etc/clamd.d/scan.conf "tmp/check/#{name}")
         if $? == 0
           zip_names = Array.new
           Zip::File.open("tmp/check/#{name}") do |inner|
@@ -199,7 +199,7 @@ class GameAssetsController < ApplicationController
         File.open("tmp/check/#{name}", 'wb') do |f|
           f.write(thumb.read)
         end
-        %x(clamscan "tmp/check/#{name}")
+        %x(clamdscan -c /etc/clamd.d/scan.conf "tmp/check/#{name}")
 
         if $? == 0
           %x(cp "tmp/check/#{name}" "public/assets/thumbs/thumbnail_#{@game_asset.id}.png")
@@ -227,7 +227,7 @@ class GameAssetsController < ApplicationController
             f.write(ss.read)
           end
 
-          %x(clamscan "tmp/check/#{name}")
+          %x(clamdscan -c /etc/clamd.d/scan.conf "tmp/check/#{name}")
           if $? == 0
             %x(cp "tmp/check/#{name}" "public/assets/screenshots/ss#{count}_asset#{@game_asset.id}.png")
             count += 1
