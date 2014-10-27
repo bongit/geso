@@ -167,7 +167,7 @@ class UsersController < ApplicationController
 
     receivers.push({
       :amount => geso_amount,
-      :email => "celendipity-facilitator@gmail.com"
+      :email => Rails.application.secrets.receive_address
       })
 
     @api = PayPal::SDK::AdaptivePayments.new
@@ -179,8 +179,8 @@ class UsersController < ApplicationController
           :receiver => receivers
         },
         :currencyCode => "JPY",
-        :cancelUrl => "http://localhost:3000/users/#{current_user.id}/cart",
-        :returnUrl => "http://localhost:3000/users/#{current_user.id}/order_complete",
+        :cancelUrl => "http://#{Rails.application.secrets.host_name}/users/#{current_user.id}/cart",
+        :returnUrl => "http://#{Rails.application.secrets.host_name}/users/#{current_user.id}/order_complete",
         :requestEnvelope => { :errorLanguage => "en_US" },
         :feesPayer => "EACHRECEIVER",})
 
