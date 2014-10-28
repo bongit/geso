@@ -11,6 +11,7 @@ gem 'will_paginate-bootstrap'
 gem 'twitter-bootstrap-rails'
 gem 'paypal-sdk-adaptivepayments'
 gem 'json'
+gem 'multi_json','1.7.8'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.5'

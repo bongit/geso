@@ -35,9 +35,9 @@
 				<%= submit_tag'ダウンロード', :class => "btn btn-primary" %>
 				<% end %>
 				<% if Review.find_by(reviewer_id: current_user.id, game_asset_id: asset.id) %>
-				<%= link_to 'レビューを変更する', review_edit_game_asset_path, :class => "btn btn-default" %></br>	
+				<%= link_to 'レビューを変更する', review_edit_game_asset_path(asset), :class => "btn btn-default" %></br>	
 				<% else %>
-				<%= link_to 'レビューを書く', review_new_game_asset_path, :class => "btn btn-default" %></br>
+				<%= link_to 'レビューを書く', review_new_game_asset_path(asset), :class => "btn btn-default" %></br>
 				<% end %>
 			</td>
 		</tr>
