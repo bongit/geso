@@ -82,7 +82,7 @@ Rails.application.configure do
 
     # Action Mailer
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { :host => '54.68.120.202' }
+  config.action_mailer.default_url_options = { :host => 'gesomaru.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     :address => 'smtp.gmail.com',
