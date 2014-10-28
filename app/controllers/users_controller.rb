@@ -255,7 +255,7 @@ class UsersController < ApplicationController
       redirect_to root_path and return
     end
 
-    redirect_to bought_asset_user_path, notice: "素材の購入が完了しました。"
+    redirect_to bought_assets_user_path, notice: "素材の購入が完了しました。"
   end
 
   def cancel
