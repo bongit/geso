@@ -11,8 +11,8 @@
 						<% end %>
 				<% else %>
 					<% if @is_bought_asset == true %>
-						<%= link_to "購入済み", bought_asset_user_path %>
-						<%= form_tag(bought_asset_game_asset_path) do %>
+						<%= link_to "購入済み", bought_assets_user_path %>
+						<%= form_tag(bought_assets_game_asset_path) do %>
 						<%= submit_tag'ダウンロード', :class => "btn btn-primary" %>
 						<% end %>
 					<% else %>
