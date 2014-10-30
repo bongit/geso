@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   require 'paypal-sdk-adaptivepayments'
   PayPal::SDK.load('config/paypal.yml',  ENV['RACK_ENV'] || 'development' || 'production')
 
-  before_action :signed_in_user, except: [:new, :create, :forgot_password, :send_password_reset, :edit_new_password, :update_password]
+  before_action :signed_in_user, except: [:new, :create, :index, :forgot_password, :send_password_reset, :edit_new_password, :update_password]
   before_action :correct_user,   only: [:edit, :update, :cart, :cart_delete, :cart_delete_all, :order]
   before_action :admin_user,     only: :destroy
   before_action :set_user, only: [:show, :edit_new_password, :update_password]
@@ -128,8 +128,11 @@ class UsersController < ApplicationController
   end
 
   def cart
-    @in_cart_item_ids =  Cart.where(user_id: current_user.id)
-    @all_assets = GameAsset.all
+    @game_assets = Array.new
+    in_cart_item_ids =  Cart.where(user_id: current_user.id)
+    in_cart_item_ids.each do |ic|
+      @game_assets.push(GameAsset.find(ic.asset_id))
+    end 
   end
 
   def cart_delete

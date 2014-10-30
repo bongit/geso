@@ -1,5 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+BON:
+  id: 1
+  name: "BON"
+  email: "celendipity@gmail.com"
+  password_digest: <%= BCrypt::Password.create("password", cost:4) %>
+  profile_text: "よろしくどうぞ！"
+  url: "http://appdente.com"
+
 <% 2.upto(100) do |n| %>  
 user<%= n %>:
   id: <%= n %>

@@ -15,20 +15,22 @@
 <div class="container-fluid">
   <div class="col-lg-6">
     <%= form_tag(thumbnail_game_asset_path, :multipart => true) do %>
-      <%= label_tag "サムネイル（.pngのみ 100kbまで）" %></br>
+      <%= label_tag "サムネイル（.pngのみ 1MBまで 128px*128px表示）" %></br>
+      ＊ファイルチェックに少々時間がかかります。アップロードボタンを何度も押さないでください。</br>
         <%= file_field_tag :thumb, accept: 'image/png', :class => "form-control" %></br>
         <%= hidden_field_tag :id, @game_asset.id %>
         <%= submit_tag 'アップロード', :data => { :disable_with => "確認中……" }, :class => "btn btn-warning" %>
       <% end %></br>
   </div>
     <div class="col-lg-6 well">
-    <%= image_tag "/assets/thumbs/thumbnail_#{@game_asset.id}.png", :width => '124', :height => '124', :alt => "サムネイル未登録" %>
+    <%= image_tag "/assets/thumbs/thumbnail_#{@game_asset.id}.png", :width => '128', :height => '128', :alt => "サムネイル未登録" %>
   </div>
 </div>
 <div class="container-fluid">
   <div class="col-lg-12">
     <%= form_tag(screenshot_game_asset_path, :multipart => true) do %>
-        <%= label_tag "スクリーンショット（.pngのみ 1枚辺り200kb/まで 3枚まで）" %></br>
+        <%= label_tag "スクリーンショット（.pngのみ 1枚辺り1MBまで 3枚まで 256px*256px表示）" %></br>
+        ＊ファイルチェックに少々時間がかかります。アップロードボタンを何度も押さないでください。</br>
         <%= file_field_tag "screenshots[]", :multiple => true, accept: 'image/png', :class => "form-control"  %></br>
         <%= hidden_field_tag :id, @game_asset.id %>
         <%= submit_tag 'アップロード', :data => { :disable_with => "確認中……" }, :class => "btn btn-warning" %>

@@ -1,1 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+<% genres = ["アクション","シューティング","格闘","ロールプレイング","シミュレーション",
+	"アドベンチャー","パズル","教育","スポーツ","レース"] %>
+<% for g in 1..10 do %>
+genre<%= g %>:
+  id: <%= g %>
+  name: <%= genres[(g-1)] %>
+<% end %>

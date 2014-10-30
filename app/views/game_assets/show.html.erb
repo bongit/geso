@@ -36,7 +36,7 @@
 	<h3>商品情報</h3><hr>
 	<panel>
 	  	<p><span class="label label-default">カテゴリ/素材タイプ/ジャンル</span></p> 
-	  	<p><%= MainCategory.find(@game_asset.main_category).name %>/<%= SubCategory.find(@game_asset.sub_category).name %>/<%= Genre.find(@game_asset.genre).name%></p>
+	  	<p><%= MainCategory.find(@game_asset.main_category).name %>/<% if @game_asset.sub_category != nil %><%= SubCategory.find(@game_asset.sub_category).name %><% end %>/<% if @game_asset.genre != nil %><%= Genre.find(@game_asset.genre).name%><% end %></p>
 	</panel>
 	  <panel>
 	  	<header>

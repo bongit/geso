@@ -97,7 +97,7 @@ ja:
       url: "ホームページ等のURL"
       submit: "変更して登録"
     show:
-      profile: "自己紹介"
+      profile: "プロフィール"
       url: "ホームページ"
       asset_title: "素材"
       num: "個"
@@ -107,6 +107,9 @@ ja:
       back: "一覧へ戻る"
       edit: "編集する"
       destroy: "削除する"
+      thumbnail: "サムネイル"
+      edit: "編集する"
+      edit_asset_info: "素材情報の編集"
     follow:
       follow: "フォローする"
     unfollow:
@@ -117,8 +120,15 @@ ja:
       downloaded: "ダウンロード数"
     forgot_password:
       title: "パスワード再設定"
+      mail_to: "メールアドレス"
+      send: "送信"
       sentence1: "パスワード再設定用リンクをお送りします。"
       sentence2: "メールアドレスを入力して下さい。"
+    edit_new_password:
+      title: "パスワード再設定"
+      password: "パスワード"
+      password_confirmation: "パスワード確認"
+      submit: "登録"
     index:
       title: "ユーザー一覧"
       search: "検索"
@@ -130,34 +140,12 @@ ja:
     form:
       error_sub: "つの誤りがあります。"
       name: "商品名"
-      category_1: "カテゴリ1"
-      category_2: "カテゴリ2"
-      category_3: "カテゴリ3"
-      sales_copy: "概要・キャッチコピー"
-      sales_body: "詳細説明"
-      sales_closing: "最後の一押し"
-      sales_copy_sub: "これはどんな商品で、どんな人に役に立つのか？一言で分かるようにしましょう。"
-      sales_body_sub: "あなたの商品に興味を持ってくれた人が知りたい情報を、出来るだけ詳しく記載して下さい。含まれるファイル一覧、便利な使い方など。"
-      sales_closing_sub: "買おうかどうか迷っている人に、この商品がなくて苦労したことを、思い出させてあげて下さい。あなたの商品でその苦労を取り払いましょう。"
-      thumbnail: "サムネイル画像（248*248）"
-      file: "素材本体"
-      price: "価格"
-      yen: "円"
-      submit: "登録"
-      underwrite: "下書き保存"
-    form2:
-      error_sub: "つの誤りがあります。"
-      name: "商品名"
-      category_1: "カテゴリ1"
-      category_2: "カテゴリ2"
-      category_3: "カテゴリ3"
-      sales_copy: "概要・キャッチコピー"
-      sales_body: "詳細説明"
-      sales_closing: "最後の一押し"
-      sales_copy_sub: "これはどんな商品で、どんな人に役に立つのか？一言で分かるようにしましょう。"
-      sales_body_sub: "あなたの商品に興味を持ってくれた人が知りたい情報を、出来るだけ詳しく記載して下さい。含まれるファイル一覧、便利な使い方など。"
-      sales_closing_sub: "買おうかどうか迷っている人に、この商品がなくて苦労したことを、思い出させてあげて下さい。あなたの商品でその苦労を取り払いましょう。"
-      thumbnail: "サムネイル画像（248*248）"
+      sales_copy: "概要・キャッチコピー（100文字まで）"
+      sales_body: "詳細説明（1000文字まで）"
+      sales_closing: "最後の一押し（400文字まで）"
+      sales_copy_sub: "この素材の一番の売りを記載して下さい。"
+      sales_body_sub: "この素材の詳細な内容、想定している使い方などを記載してください。"
+      sales_closing_sub: "この素材でどんな苦労が取り除けるかを説明してください。"
       file: "素材本体"
       price: "価格"
       yen: "円"
@@ -170,3 +158,11 @@ ja:
       search: "検索"
       previous_page: "前のページ"
       next_page: "次のページ"      
+
+
+
+
+
+
+
+

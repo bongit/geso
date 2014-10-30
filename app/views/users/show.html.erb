@@ -37,29 +37,7 @@
     <h1><%= t('.asset_title') %><span class="badge badge-important"><%= @user.game_assets.count%></span><%= t('.num')%></h1>
   </div>
   <div class="container-fluid">
-<%= will_paginate @game_assets, :previous_label => t('.previous_page'), :next_label => t('.next_page'), renderer: BootstrapPagination::Rails %>
-    <table class="table table-hover">
-      <thead>
-        <th>サムネイル</th>
-        <th><%= t('.asset_name') %></th>
-        <th><%= t('.asset_pr') %></th>
-        <th><%= t('.asset_dl') %></th>
-        <% if @user == current_user %>
-        <th>素材情報の編集</th>
-        <% end %>
-      </thead>
-        <% @user.game_assets.each do |g| %>
-        <tbody>
-            <td><%= link_to image_tag("/assets/thumbs/thumbnail_#{g.id}.png", :width => '100', :height => '100'), g%></td>
-            <td><%= link_to g.name, g %></td>
-            <td><%= g.sales_copy %></td>
-            <td><%= g.downloaded_times %></td>
-            <% if @user == current_user %>
-            <td><%= link_to "編集する", "/game_assets/#{g.id}/edit", :class => 'btn btn-default' %></td>
-            <% end %>            
-        </tbody>
-        <% end %>
-    </table>
+    <%= render :partial => 'asset_table', :locals => {:assets => @game_assets, :parent => 'user_profile'}%>
   </div>
 <% end %>
 

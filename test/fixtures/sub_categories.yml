@@ -1,1 +1,23 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+<% s_categories = ["キャラクター", "イラスト", "アイテム・オブジェクト","背景","マップ","エフェクト","インターフェース・アイコン",
+	"ゲームプログラム","ライブラリ","コード・クラス等",
+	"効果音","BGM","音声","歌"] %>
+<% for s in 1..7 do %>
+sub<%= s %>:
+  id: <%= s %>
+  name: <%= s_categories[(s-1)] %>
+  parent_id: 1
+<% end %>
+<% for s in 8..10 do %>
+sub<%= s %>:
+  id: <%= s %>
+  name: <%= s_categories[(s-1)] %>
+  parent_id: 2
+<% end %>
+<% for s in 11..14 do %>
+sub<%= s %>:
+  id: <%= s %>
+  name: <%= s_categories[(s-1)] %>
+  parent_id: 3
+<% end %>

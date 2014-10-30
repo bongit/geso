@@ -11,14 +11,14 @@ class GameAsset < ActiveRecord::Base
 	validate :main_category_scope
 		def main_category_scope
 			errors.add(:main_category, "カテゴリを選んで下さい") if 
-			main_category < 0 || 4 < main_category
+			main_category < 1 || 3 < main_category
 		end
 
 	validates :price, numericality: { only_integer: true }
 	validate :price_tier
 		def price_tier
-			errors.add(:price, "価格は0円、または、100円以上100,000以下で設定して下さい。") if 
-			price < 0 || ( 0 < price && price < 99 ) || 100000 < price
+			errors.add(:price, "現在、無料素材のみご利用頂けます。") if 
+			price < 0 || 0 < price
 		end
 	validates :file_name, length: { maximum: 100 }
 	validates :sales_copy, length: { maximum: 100 }
@@ -34,13 +34,13 @@ class GameAsset < ActiveRecord::Base
 	validate :sub_category_scope
 		def sub_category_scope
 			errors.add(:sub_category, "カテゴリを選んで下さい") if 
-			(sub_category != nil && sub_category < 0) || (sub_category != nil && 15 < sub_category)
+			(sub_category != nil && sub_category < 1) || (sub_category != nil && 14 < sub_category)
 		end
 	validates :genre, numericality: { only_integer: true }, allow_nil: true
 	validate :genre_scope
 		def genre_scope
 			errors.add(:genre, "ゲームジャンルを選んで下さい") if 
-			(genre != nil && genre < 0) || (genre != nil && 11 < genre)
+			(genre != nil && genre < 1) || (genre != nil && 10 < genre)
 		end
 
 	attr_accessor :file, :screenshots, :thumb

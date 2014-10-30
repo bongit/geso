@@ -1,6 +1,6 @@
 # coding: utf-8
 class GameAssetsController < ApplicationController
-  before_action :signed_in_user
+  before_action :signed_in_user, except: [:index]
   before_action :asset_owner, only: [:edit, :update, :destroy, :zip, :upload, :asset_file_upload, :thumbnail_check, :screenshot_check, :back_to_upload, :asset_file_confirm] # include set_game_asset
   before_action :set_game_asset, only: [:show, :review_new, :download, :review_new, :review_edit, :add_to_cart, :get_free_asset]
   require 'rubygems'
@@ -64,13 +64,11 @@ class GameAssetsController < ApplicationController
   # PATCH/PUT /game_assets/1
   # PATCH/PUT /game_assets/1.json
   def update
-    respond_to do |format|
       if @game_asset.update(game_asset_params)
-        format.html { redirect_to @game_asset, notice: "素材の情報を更新しました。" }
+        redirect_to @game_asset, notice: "素材の情報を更新しました。"
       else
-        format.html { render :edit, notice: '値が正しくありません。'}
+        render :edit, notice: '値が正しくありません。'
       end
-    end
   end
 
   # DELETE /game_assets/1
@@ -146,11 +144,11 @@ class GameAssetsController < ApplicationController
           end
           @game_asset.zip_includes = zip_names
           @game_asset.file_name = file.original_filename
-            if @game_asset.save   
+            if @game_asset.save 
               redirect_to asset_file_confirm_game_asset_path, notice: "素材ファイルの解析が終了しました。このファイルで良いか確認して下さい。"
             else
               %x(rm -rf "tmp/check/#{name}")
-              redirect_to :back, alert: "ファイルの解析に失敗しました。もう一度やり直して下さい。"
+              redirect_to :back, alert: "素材情報の更新に失敗しました。もう一度やり直して下さい。"
             end
         else
           %x(rm -rf "tmp/check/#{name}")
@@ -194,7 +192,7 @@ class GameAssetsController < ApplicationController
   def thumbnail_check
     thumb = form_tag_params[:thumb]
     if thumb != nil
-      if thumb.size < 500.kilobytes
+      if thumb.size < 1.megabytes
         name = thumb.original_filename
         File.open("tmp/check/#{name}", 'wb') do |f|
           f.write(thumb.read)

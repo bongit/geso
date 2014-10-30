@@ -1,1 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+<% m_categories = ["グラフィック素材","プログラム素材","音素材"] %>
+<% for m in 1..3 do %>
+main<%= m %>:
+  id: <%= m %>
+  name: <%= m_categories[(m-1)] %>
+<% end %>

@@ -2,46 +2,5 @@
   <h1>購入済み</h1>
 </div>
 <div class="container-fluid">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>サムネイル</th>
-        <th>商品名</br>作者名</th>
-        <th>カテゴリ</br>ジャンル</br>商品説明</th>
-        <th>ライセンス</th>
-        <th>ダウンロード</br>レビュー</th>
-      </tr>
-    </thead>
-    <tbody>
-    	<% @assets.each do |asset| %>
-		<tr>
-			<td>
-				<%= link_to image_tag("/assets/thumbs/thumbnail_#{asset.id}.png", :width => '100', :height => '100'), asset %>
-			</td>
-			<td>
-				<%= link_to asset.name, asset %></br>
-				<%= link_to User.find(asset.user_id).name, "#" %>
-			</td>
-			<td>
-				<p><%= MainCategory.find(asset.main_category).name %></p>
-				<p><%= Genre.find(asset.genre).name %></p>
-				<p><%= asset.sales_copy %></p>
-			</td>
-			<td>
-				<%= render partial: "creative_commons", locals: {:license => asset.license} %>
-			</td>
-			<td>
-				<%= form_tag(bought_asset_game_asset_path(asset)) do %>
-				<%= submit_tag'ダウンロード', :class => "btn btn-primary" %>
-				<% end %>
-				<% if Review.find_by(reviewer_id: current_user.id, game_asset_id: asset.id) %>
-				<%= link_to 'レビューを変更する', review_edit_game_asset_path(asset), :class => "btn btn-default" %></br>	
-				<% else %>
-				<%= link_to 'レビューを書く', review_new_game_asset_path(asset), :class => "btn btn-default" %></br>
-				<% end %>
-			</td>
-		</tr>
-		<% end %>
-    </tbody>
-</table>
+	<%= render :partial => 'asset_table', :locals => {:assets => @assets, :parent => 'bought_assets'} %>
 </div>
