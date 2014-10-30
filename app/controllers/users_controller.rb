@@ -45,13 +45,11 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     if BCrypt::Password.new(@user.password_digest) == user_params[:password]
-      respond_to do |format|
         if @user.update(user_params)
-          format.html { redirect_to @user, notice: '更新しました。' }
+          redirect_to @user, notice: '更新しました。'
         else
-          format.html { render :edit }
+          render :edit
         end
-      end
     else
       flash.now[:error] = 'パスワードが違います。'
       render :edit
