@@ -1,3 +1,4 @@
+# encoding: utf-8
 class UsersController < ApplicationController
   require 'paypal-sdk-adaptivepayments'
   PayPal::SDK.load('config/paypal.yml',  ENV['RACK_ENV'] || 'development' || 'production')

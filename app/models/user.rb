@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
 	validates :password, length: { in: 6..20 }
 	validates :url, 
 		format: { with: /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix,allow_blank: true }
-	validates :profile_text, length: { maximum: 1000 }
+	validates :profile_text, length: { maximum: 2000 }
 
 	def self.search(search_word) #self.でクラスメソッドとしている
     	if search_word

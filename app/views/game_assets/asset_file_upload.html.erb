@@ -3,7 +3,7 @@
 	  <h1>素材のアップロード</h1></br>
 	</div>
 	<%= form_tag('asset_file_upload', :multipart => true) do %>
-	<%= label :file, "素材ファイル（.zip形式のみ 100MBまで）"%></br>
+	<%= label :file, "素材ファイル（.zip形式のみ 100MBまで　ファイル名はアルファベット推奨）"%></br>
 	＊ファイルチェックにかなり時間がかかります。アップロードボタンを何度も押さないでください。</br>
 	<%= file_field_tag :file, accept: 'application/zip', :class => "form-control" %>
 	<%= submit_tag 'アップロード', :class => "btn btn-warning" %>

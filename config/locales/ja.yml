@@ -93,7 +93,7 @@ ja:
       name: "名前（ニックネーム可）"
       email: "メールアドレス"
       password: "パスワード"
-      profile_text: "自己紹介（1000文字以内）"
+      profile_text: "自己紹介（200文字以内）"
       url: "ホームページ等のURL"
       submit: "変更して登録"
     show:
