@@ -329,7 +329,7 @@ class GameAssetsController < ApplicationController
     end
 
     def signed_in_user
-      redirect_to signin_url, notice: "ログインして下さい。" unless signed_in?
+      redirect_to signin_path, notice: "ログインして下さい。" unless signed_in?
     end
 
     def asset_owner
