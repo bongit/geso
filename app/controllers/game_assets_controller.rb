@@ -1,6 +1,6 @@
 # coding: utf-8
 class GameAssetsController < ApplicationController
-  before_action :signed_in_user, except: [:index]
+  before_action :signed_in_user, except: [:index, :show]
   before_action :asset_owner, only: [:edit, :update, :destroy, :zip, :upload, :asset_file_upload, :thumbnail_check, :screenshot_check, :back_to_upload, :asset_file_confirm] # include set_game_asset
   before_action :set_game_asset, only: [:show, :review_new, :download, :review_new, :review_edit, :add_to_cart, :get_free_asset]
   require 'rubygems'
@@ -26,9 +26,13 @@ class GameAssetsController < ApplicationController
   # GET /game_assets/1
   # GET /game_assets/1.json
   def show
-    @author = User.find(@game_asset[:user_id])
-    @is_bought_asset = BoughtAsset.exists?(user_id: current_user.id, game_asset_id: params[:id])
-    @license = @game_asset.license
+    if signed_in?
+      @author = User.find(@game_asset[:user_id])
+      @is_bought_asset = BoughtAsset.exists?(user_id: current_user.id, game_asset_id: params[:id])
+      @license = @game_asset.license
+    else
+      redirect_to signin_path, :notice => "ログインしてください。"
+    end
   end
 
   # GET /game_assets/new
